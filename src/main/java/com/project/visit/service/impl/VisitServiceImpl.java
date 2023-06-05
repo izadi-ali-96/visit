@@ -31,7 +31,7 @@ public class VisitServiceImpl implements VisitService {
 	@Override
 	public List<Visit> generateVisitTimes(GenerateVisitTimeInput input) {
 		var visit = new ArrayList<Visit>();
-		doctorRepository.findById(input.doctorId()).ifPresent(doctor -> {
+		doctorRepository.findByMedicalCode(input.medicalCode()).ifPresent(doctor -> {
 			var start = input.from();
 			while (start + PERIOD <= input.to()) {
 				var v = new Visit();

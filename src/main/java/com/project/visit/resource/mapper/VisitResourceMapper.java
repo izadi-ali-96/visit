@@ -12,4 +12,5 @@ public interface VisitResourceMapper {
 	VisitModel toVisitModel(Visit visit);
 
 	List<VisitModel> toVisitModel(List<Visit> visit);
+
 }
