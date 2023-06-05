@@ -2,10 +2,13 @@ package com.project.visit.resource;
 
 import com.project.visit.resource.filter.RequestContextInterceptor;
 import com.project.visit.resource.mapper.VisitResourceMapper;
+import com.project.visit.resource.request.AssignRequestModel;
 import com.project.visit.resource.request.GenerateVisitRequestMode;
+import com.project.visit.resource.response.AssignVisitResponse;
 import com.project.visit.resource.response.VisitResponseModel;
 import com.project.visit.service.VisitService;
 import com.project.visit.service.model.GenerateVisitTimeInput;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -29,6 +32,12 @@ public class VisitResource {
 		var req = new GenerateVisitTimeInput(request.from(), request.to(), context.getUserId());
 		var result = service.generateVisitTimes(req);
 		return ResponseEntity.ok(new VisitResponseModel(result));
+	}
+
+	@PostMapping("/assign")
+	ResponseEntity<AssignVisitResponse> assign(@Valid @RequestBody AssignRequestModel model) {
+		var result = service.assignVisit(model.getVisitId(), RequestContextInterceptor.getCurrentContext().getUserId());
+		return ResponseEntity.ok(new AssignVisitResponse(result.getId()));
 	}
 
 }

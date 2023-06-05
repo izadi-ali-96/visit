@@ -29,6 +29,8 @@ public class Doctor implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
+	private String userId;
+
 	private String name;
 
 	private String family;

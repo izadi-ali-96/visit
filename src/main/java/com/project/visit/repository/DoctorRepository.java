@@ -22,4 +22,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 		return findAllByAddresses_City_Id(cityId);
 	}
 
+	Optional<Doctor> findByUserId(String userId);
+
 }

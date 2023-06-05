@@ -42,10 +42,10 @@ public class UserServiceImpl implements UserService {
 		var optionalUser = userRepository.findByPhone(model.getPhone());
 		if (optionalUser.isPresent()) {
 			addRole("DOCTOR", optionalUser.get());
-			createNewDoctor(model);
+			createNewDoctor(optionalUser.get(), model);
 		} else {
-			createNewUser(model);
-			createNewDoctor(model);
+			var user = createNewUser(model);
+			createNewDoctor(user, model);
 		}
 
 	}
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	private void createNewUser(UserCreationModel model) {
+	private User createNewUser(UserCreationModel model) {
 		var user = new User();
 		user.setUserId(UUID.randomUUID().toString());
 		user.setName(model.getName());
@@ -69,13 +69,14 @@ public class UserServiceImpl implements UserService {
 		var role = roleRepository.findByName("USER");
 		user.setRoles(List.of(role));
 
-		userRepository.save(user);
+		return userRepository.save(user);
 	}
 
-	private void createNewDoctor(UserCreationModel model) {
+	private void createNewDoctor(User user, UserCreationModel model) {
 		var doctorOptional = doctorRepository.findByMedicalCode(model.getMedicalCode());
 		if (doctorOptional.isEmpty()) {
 			var doctor = new Doctor();
+			doctor.setUserId(user.getUserId());
 			doctor.setName(model.getName());
 			doctor.setMedicalCode(model.getMedicalCode());
 			doctor.setFamily(model.getFamily());

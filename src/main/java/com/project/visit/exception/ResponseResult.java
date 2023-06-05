@@ -9,6 +9,8 @@ public enum ResponseResult {
 
 	DOCTOR_NOT_FOUND("100", "doctor.not.found"),
 	ADDRESS_NOT_FOUND("101", "address.not.found"),
+	CITY_NOT_FOUND("102", "city.not.found"),
+
 	INVALID_ACCESS("1000", "invalid.access"),
 	VISIT_NOT_FOUND("2000", "visit.not.found"),
 	VISIT_ASSIGNED("2001", "visit.assigned"),

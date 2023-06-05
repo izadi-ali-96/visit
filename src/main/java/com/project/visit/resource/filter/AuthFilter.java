@@ -24,15 +24,17 @@ public class AuthFilter extends OncePerRequestFilter {
 	private final AuthService authService;
 
 	private static final List<Pattern> PUBLIC_URLS = List.of(
-			Pattern.compile(".*\\/swagger-ui.*"),
-			Pattern.compile(".*\\/api-docs.*"),
-			Pattern.compile("\\/authentication/login"),
-			Pattern.compile("\\/user/patient"),
-			Pattern.compile("\\/user/doctor")
+			Pattern.compile("/swagger-ui.*"),
+			Pattern.compile("/api-docs.*"),
+			Pattern.compile("/authentication/login"),
+			Pattern.compile("/user/patient"),
+			Pattern.compile("/user/doctor"),
+			Pattern.compile("/doctor"),
+			Pattern.compile("/doctor/\\d")
 	);
 
 	private static final Map<Pattern, String> PERMIT_URLS = Map.of(
-			Pattern.compile("\\/doctor.*"), "DOCTOR"
+			Pattern.compile("/doctor/address/\\d"), "DOCTOR"
 	);
 
 	@Override
@@ -44,7 +46,11 @@ public class AuthFilter extends OncePerRequestFilter {
 		}
 		var authModel = authService.checkToken(request.getHeader("auth"));
 		checkApiPermission(request.getRequestURI(), authModel.roles());
-		filterChain.doFilter(request, response);
+
+		var mutableRequest = new MutableHttpServletRequest(request);
+		mutableRequest.putHeader(Constants.REQUEST_HEADER_USER_ID, authModel.username());
+
+		filterChain.doFilter(mutableRequest, response);
 	}
 
 	void checkApiPermission(String url, List<String> roles) {

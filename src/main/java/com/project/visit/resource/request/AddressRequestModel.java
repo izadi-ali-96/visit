@@ -1,5 +1,7 @@
 package com.project.visit.resource.request;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -19,4 +21,8 @@ public class AddressRequestModel {
 
 	@NotNull
 	private Long cityId;
+
+	private List<String> phones;
+
+	private List<String> days;
 }

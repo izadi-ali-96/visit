@@ -3,6 +3,7 @@ package com.project.visit.model;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +31,7 @@ public class User implements Serializable {
 
 	private String family;
 
+	@Column(unique = true)
 	private String phone;
 
 	private String password;
