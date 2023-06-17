@@ -19,11 +19,15 @@ public interface VisitResourceMapper {
 
     List<VisitModel> toVisitModel(List<Visit> visit);
 
-    List<DoctorVisitInfoResponse> toDoctorVisitInfoResponse(List<VisitInfoModel> models);
+    default DoctorVisitInfoResponse toDoctorVisitInfoResponse(List<VisitInfoModel> models) {
+        return new DoctorVisitInfoResponse(models.stream().map(this::toDoctorInfo).toList());
+    }
 
     DoctorVisitInfo toDoctorInfo(VisitInfoModel model);
 
-    List<UserVisitInfoResponse> toUserVisitInfoResponse(List<VisitInfoModel> models);
+    default UserVisitInfoResponse toUserVisitInfoResponse(List<VisitInfoModel> models) {
+        return new UserVisitInfoResponse(models.stream().map(this::toUserInfo).toList());
+    }
 
     @Mapping(target = "path", source = "path")
     @Mapping(target = "doctor", source = "doctorName")

@@ -3,9 +3,11 @@ package com.project.visit.resource;
 import com.project.visit.resource.filter.RequestContextInterceptor;
 import com.project.visit.resource.mapper.VisitResourceMapper;
 import com.project.visit.resource.request.AssignRequestModel;
+import com.project.visit.resource.request.DoctorVisitInfoRequest;
 import com.project.visit.resource.request.GenerateVisitRequestMode;
 import com.project.visit.resource.response.AssignVisitResponse;
 import com.project.visit.resource.response.DoctorVisitInfoResponse;
+import com.project.visit.resource.response.UserVisitInfoResponse;
 import com.project.visit.resource.response.VisitResponseModel;
 import com.project.visit.service.VisitService;
 import com.project.visit.service.model.GenerateVisitTimeInput;
@@ -38,10 +40,17 @@ public class VisitResource {
     }
 
     @GetMapping("/user")
-    ResponseEntity<DoctorVisitInfoResponse> getUserVisit() {
+    ResponseEntity<UserVisitInfoResponse> getUserVisit() {
         var context = RequestContextInterceptor.getCurrentContext();
-        service.getUserVisits(context.getUserId());
+        var result = service.getUserVisits(context.getUserId());
+        return ResponseEntity.ok(mapper.toUserVisitInfoResponse(result));
+    }
 
+    @GetMapping("/doctor")
+    ResponseEntity<DoctorVisitInfoResponse> getUserVisit(@RequestBody DoctorVisitInfoRequest request) {
+        var context = RequestContextInterceptor.getCurrentContext();
+        var result = service.getDoctorVisit(context.getUserId(), request.getFrom(), request.getTo(), request.getAddressId());
+        return ResponseEntity.ok(mapper.toDoctorVisitInfoResponse(result));
     }
 
 }

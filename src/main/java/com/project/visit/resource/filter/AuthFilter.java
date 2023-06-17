@@ -48,7 +48,7 @@ public class AuthFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
-		var authModel = authService.checkToken(request.getHeader("auth"));
+		var authModel = authService.checkToken(request.getHeader("authorization"));
 		checkApiPermission(request.getRequestURI(), authModel.roles());
 
 		var mutableRequest = new MutableHttpServletRequest(request);
