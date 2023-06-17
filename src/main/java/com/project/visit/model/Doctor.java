@@ -47,4 +47,7 @@ public class Doctor implements Serializable {
 	@OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER)
 	private Set<Visit> visits = new HashSet<>();
 
+	public String getFullName() {
+		return name + " " + family;
+	}
 }

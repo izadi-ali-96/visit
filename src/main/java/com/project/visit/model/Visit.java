@@ -1,33 +1,30 @@
 package com.project.visit.model;
 
-import java.io.Serializable;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
 public class Visit implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-	private Long time;
+    private Long time;
 
-	@ManyToOne
-	@JoinColumn
-	private Doctor doctor;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    private Doctor doctor;
 
-	@ManyToOne
-	@JoinColumn
-	private User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    private User user;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Address address;
 }

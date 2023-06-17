@@ -44,4 +44,8 @@ public class User implements Serializable {
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private List<Role> roles;
 
+	public String getFullName() {
+		return name + " " + family;
+	}
+
 }

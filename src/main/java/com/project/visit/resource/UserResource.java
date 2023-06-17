@@ -32,4 +32,6 @@ public class UserResource {
 		service.createDoctor(mapper.toUserCreationModel(model));
 		return ResponseEntity.ok().build();
 	}
+
+
 }
