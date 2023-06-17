@@ -24,12 +24,12 @@ public class UserResource {
 	@PostMapping("/patient")
 	ResponseEntity<Void> createUser(@RequestBody CreateUserRequestModel model) {
 		service.createUser(mapper.toUserCreationModel(model));
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/doctor")
 	ResponseEntity<Void> createDoctor(@RequestBody CreateDoctorRequestModel model) {
 		service.createDoctor(mapper.toUserCreationModel(model));
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 }
