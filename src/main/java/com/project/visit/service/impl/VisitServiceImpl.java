@@ -9,9 +9,9 @@ import com.project.visit.repository.DoctorRepository;
 import com.project.visit.repository.UserRepository;
 import com.project.visit.repository.VisitRepository;
 import com.project.visit.service.VisitService;
-import com.project.visit.service.VisitServiceMapper;
+import com.project.visit.service.mapper.VisitServiceMapper;
 import com.project.visit.service.model.GenerateVisitTimeInput;
-import com.project.visit.service.model.VisitModel;
+import com.project.visit.service.model.VisitInfoModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -75,12 +75,12 @@ public class VisitServiceImpl implements VisitService {
         visitRepository.save(visit);
     }
     @Override
-    public List<VisitModel> getUserVisits(String userId) {
+    public List<VisitInfoModel> getUserVisits(String userId) {
         var result = visitRepository.findAllByUserUserId(userId);
         return mapper.toVisitModel(result);
     }
     @Override
-    public List<VisitModel> getDoctorVisit(String doctorId, Long from, Long to, Long addressId) {
+    public List<VisitInfoModel> getDoctorVisit(String doctorId, Long from, Long to, Long addressId) {
         return mapper.toVisitModel(visitRepository.findAllByDoctorUserIdAndAddressIdAndTimeBetween(doctorId, addressId, from, to));
     }
 

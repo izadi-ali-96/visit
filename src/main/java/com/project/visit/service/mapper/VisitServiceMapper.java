@@ -1,7 +1,7 @@
-package com.project.visit.service;
+package com.project.visit.service.mapper;
 
 import com.project.visit.model.Visit;
-import com.project.visit.service.model.VisitModel;
+import com.project.visit.service.model.VisitInfoModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -15,7 +15,7 @@ public interface VisitServiceMapper {
     @Mapping(target = "path", source = "address.path")
     @Mapping(target = "doctorName", expression = "java(visit.getDoctor().getFullName())")
     @Mapping(target = "userName", expression = "java(visit.getUser() != null ? visit.getUser().getFullName() : null)")
-    VisitModel toVisitModel(Visit visit);
+    VisitInfoModel toVisitModel(Visit visit);
 
-    List<VisitModel> toVisitModel(List<Visit> visits);
+    List<VisitInfoModel> toVisitModel(List<Visit> visits);
 }

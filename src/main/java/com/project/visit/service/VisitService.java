@@ -2,7 +2,7 @@ package com.project.visit.service;
 
 import com.project.visit.model.Visit;
 import com.project.visit.service.model.GenerateVisitTimeInput;
-import com.project.visit.service.model.VisitModel;
+import com.project.visit.service.model.VisitInfoModel;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ public interface VisitService {
 
     void deleteVisit(Long visitId, String userId);
 
-    List<VisitModel> getUserVisits(String userId);
+    List<VisitInfoModel> getUserVisits(String userId);
 
-    List<VisitModel> getDoctorVisit(String doctorId, Long from, Long to, Long addressId);
+    List<VisitInfoModel> getDoctorVisit(String doctorId, Long from, Long to, Long addressId);
 
 }

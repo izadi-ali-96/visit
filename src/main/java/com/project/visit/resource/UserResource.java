@@ -5,7 +5,6 @@ import com.project.visit.resource.request.CreateDoctorRequestModel;
 import com.project.visit.resource.request.CreateUserRequestModel;
 import com.project.visit.service.UserService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,21 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserResource {
 
-	private final UserService service;
+    private final UserService service;
 
-	private final UserResourceMapper mapper;
+    private final UserResourceMapper mapper;
 
-	@PostMapping("/patient")
-	ResponseEntity<Void> createUser(@RequestBody CreateUserRequestModel model) {
-		service.createUser(mapper.toUserCreationModel(model));
-		return ResponseEntity.ok().build();
-	}
+    @PostMapping("/patient")
+    ResponseEntity<Void> createUser(@RequestBody CreateUserRequestModel model) {
+        var result = service.createUser(mapper.toUserCreationModel(model));
+        return ResponseEntity.ok().header("Authorization", result).build();
+    }
 
-	@PostMapping("/doctor")
-	ResponseEntity<Void> createDoctor(@RequestBody CreateDoctorRequestModel model) {
-		service.createDoctor(mapper.toUserCreationModel(model));
-		return ResponseEntity.ok().build();
-	}
-
-
+    @PostMapping("/doctor")
+    ResponseEntity<Void> createDoctor(@RequestBody CreateDoctorRequestModel model) {
+        var result = service.createDoctor(mapper.toUserCreationModel(model));
+        return ResponseEntity.ok().header("Authorization", result).build();
+    }
 }

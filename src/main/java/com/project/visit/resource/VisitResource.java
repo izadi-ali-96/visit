@@ -5,16 +5,14 @@ import com.project.visit.resource.mapper.VisitResourceMapper;
 import com.project.visit.resource.request.AssignRequestModel;
 import com.project.visit.resource.request.GenerateVisitRequestMode;
 import com.project.visit.resource.response.AssignVisitResponse;
+import com.project.visit.resource.response.DoctorVisitInfoResponse;
 import com.project.visit.resource.response.VisitResponseModel;
 import com.project.visit.service.VisitService;
 import com.project.visit.service.model.GenerateVisitTimeInput;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/visit")
@@ -37,6 +35,13 @@ public class VisitResource {
     ResponseEntity<AssignVisitResponse> assign(@Valid @RequestBody AssignRequestModel model) {
         var result = service.assignVisit(model.getVisitId(), RequestContextInterceptor.getCurrentContext().getUserId());
         return ResponseEntity.ok(new AssignVisitResponse(result.getId()));
+    }
+
+    @GetMapping("/user")
+    ResponseEntity<DoctorVisitInfoResponse> getUserVisit() {
+        var context = RequestContextInterceptor.getCurrentContext();
+        service.getUserVisits(context.getUserId());
+
     }
 
 }
