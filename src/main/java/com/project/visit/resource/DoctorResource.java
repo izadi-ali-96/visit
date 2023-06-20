@@ -6,6 +6,7 @@ import com.project.visit.resource.request.AddressRequestModel;
 import com.project.visit.resource.request.UpdateUserInfoRequestModel;
 import com.project.visit.resource.response.DoctorListResponseModel;
 import com.project.visit.resource.response.DoctorResponseModel;
+import com.project.visit.resource.response.ExpertiseResponse;
 import com.project.visit.service.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,12 @@ public class DoctorResource {
     @GetMapping("/{medicalCode}")
     ResponseEntity<DoctorResponseModel> getDoctor(@PathVariable("medicalCode") String code) {
         return ResponseEntity.ok(new DoctorResponseModel(mapper.toDoctorData(service.findDoctor(code))));
+    }
+
+    @GetMapping("/expertise")
+    ResponseEntity<ExpertiseResponse> getExpertise() {
+        var result = service.getExpertise().stream().map(e -> new ExpertiseResponse.ExpertiseInfo(e.getId(), e.getName())).toList();
+        return ResponseEntity.ok(new ExpertiseResponse(result));
     }
 
     @PutMapping("/info")

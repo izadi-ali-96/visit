@@ -1,6 +1,7 @@
 package com.project.visit.service;
 
 import com.project.visit.model.Doctor;
+import com.project.visit.model.Expertise;
 import com.project.visit.service.model.AddressModel;
 import com.project.visit.service.model.UserInfoModel;
 
@@ -19,4 +20,6 @@ public interface DoctorService {
     void updateAddress(Long addressId, AddressModel model);
 
     void deleteAddress(Long doctorId, Long addressIs);
+
+    List<Expertise> getExpertise();
 }

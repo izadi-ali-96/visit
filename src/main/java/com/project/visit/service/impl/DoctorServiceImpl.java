@@ -4,10 +4,8 @@ import com.project.visit.exception.DoctorException;
 import com.project.visit.exception.ResponseResult;
 import com.project.visit.model.Address;
 import com.project.visit.model.Doctor;
-import com.project.visit.repository.AddressRepository;
-import com.project.visit.repository.CityRepository;
-import com.project.visit.repository.DoctorRepository;
-import com.project.visit.repository.UserRepository;
+import com.project.visit.model.Expertise;
+import com.project.visit.repository.*;
 import com.project.visit.service.DoctorService;
 import com.project.visit.service.model.AddressModel;
 import com.project.visit.service.model.UserInfoModel;
@@ -29,6 +27,8 @@ public class DoctorServiceImpl implements DoctorService {
     private final UserRepository userRepository;
 
     private final CityRepository cityRepository;
+
+    private final ExpertiseRepository expertiseRepository;
 
     public List<Doctor> findDoctorByCity(Long cityId, List<Long> tags) {
         return doctorRepository.findDoctorsByCityId(cityId, tags);
@@ -98,5 +98,10 @@ public class DoctorServiceImpl implements DoctorService {
                 }), () -> {
             throw new DoctorException(ResponseResult.DOCTOR_NOT_FOUND);
         });
+    }
+
+    @Override
+    public List<Expertise> getExpertise() {
+        return expertiseRepository.findAll();
     }
 }
