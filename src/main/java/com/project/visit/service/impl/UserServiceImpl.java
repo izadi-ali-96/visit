@@ -28,21 +28,19 @@ public class UserServiceImpl implements UserService {
     private final AuthService authService;
 
     @Override
-    public String createUser(UserCreationModel model) {
+    public void createUser(UserCreationModel model) {
         var optionalUser = userRepository.findByPhone(model.getPhone());
-        User updatedUser;
         if (optionalUser.isPresent()) {
             var user = optionalUser.get();
             checkPassword(model.getPassword(), user);
-            updatedUser = addRole("USER", user);
+            addRole("USER", user);
         } else {
-            updatedUser = createNewUser(model);
+            createNewUser(model);
         }
-        return authService.generateToken(updatedUser.getPhone(), updatedUser.getPassword());
     }
 
     @Override
-    public String createDoctor(UserCreationModel model) {
+    public void createDoctor(UserCreationModel model) {
         var user = userRepository.findByPhone(model.getPhone()).orElse(null);
         if (user != null) {
             checkPassword(model.getPassword(), user);
@@ -52,7 +50,6 @@ public class UserServiceImpl implements UserService {
             user = createNewUser(model);
             createNewDoctor(user, model);
         }
-        return authService.generateToken(user.getPhone(), user.getPassword());
     }
 
     private User addRole(String roleName, User user) {

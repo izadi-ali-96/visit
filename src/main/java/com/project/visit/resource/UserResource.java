@@ -22,13 +22,13 @@ public class UserResource {
 
     @PostMapping("/patient")
     ResponseEntity<Void> createUser(@RequestBody CreateUserRequestModel model) {
-        var result = service.createUser(mapper.toUserCreationModel(model));
-        return ResponseEntity.ok().header("Authorization", result).build();
+        service.createUser(mapper.toUserCreationModel(model));
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/doctor")
     ResponseEntity<Void> createDoctor(@RequestBody CreateDoctorRequestModel model) {
-        var result = service.createDoctor(mapper.toUserCreationModel(model));
-        return ResponseEntity.ok().header("Authorization", result).build();
+        service.createDoctor(mapper.toUserCreationModel(model));
+        return ResponseEntity.ok().build();
     }
 }

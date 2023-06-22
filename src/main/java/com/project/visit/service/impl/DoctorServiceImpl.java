@@ -13,7 +13,10 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -29,6 +32,8 @@ public class DoctorServiceImpl implements DoctorService {
     private final CityRepository cityRepository;
 
     private final ExpertiseRepository expertiseRepository;
+
+    private final static String path = "/Users/ali/Desktop/profile";
 
     public List<Doctor> findDoctorByCity(Long cityId, List<Long> tags) {
         return doctorRepository.findDoctorsByCityId(cityId, tags);
@@ -103,5 +108,13 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<Expertise> getExpertise() {
         return expertiseRepository.findAll();
+    }
+
+    @Override
+    public void saveFile(MultipartFile file, String userId) throws IOException {
+        var content = file.getBytes();
+        FileOutputStream outputStream = new FileOutputStream(path + userId, true);
+        outputStream.write(content);
+        outputStream.close();
     }
 }

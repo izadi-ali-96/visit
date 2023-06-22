@@ -3,7 +3,7 @@ package com.project.visit.service;
 import com.project.visit.service.model.UserCreationModel;
 
 public interface UserService {
-	String createUser(UserCreationModel model);
+	void createUser(UserCreationModel model);
 
-	String createDoctor(UserCreationModel model);
+	void createDoctor(UserCreationModel model);
 }
