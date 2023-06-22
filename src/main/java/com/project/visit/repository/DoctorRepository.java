@@ -15,6 +15,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @EntityGraph("doctor.addresses")
     Optional<Doctor> findByMedicalCode(String code);
 
+
     List<Doctor> findAllByAddresses_City_IdAndExpertiseIdInAndActiveIsTrue(Long cityId, List<Long> exp);
 
     List<Doctor> findAllByAddresses_City_IdAndActiveIsTrue(Long cityId);

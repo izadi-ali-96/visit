@@ -9,6 +9,7 @@ import com.project.visit.repository.UserRepository;
 import com.project.visit.service.AuthService;
 import com.project.visit.service.UserService;
 import com.project.visit.service.model.UserCreationModel;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final AuthService authService;
 
     @Override
+    @Transactional
     public void createUser(UserCreationModel model) {
         var optionalUser = userRepository.findByPhone(model.getPhone());
         if (optionalUser.isPresent()) {
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void createDoctor(UserCreationModel model) {
         var user = userRepository.findByPhone(model.getPhone()).orElse(null);
         if (user != null) {
@@ -75,15 +78,19 @@ public class UserServiceImpl implements UserService {
 
     private void createNewDoctor(User user, UserCreationModel model) {
         var doctorOptional = doctorRepository.findByMedicalCode(model.getMedicalCode());
-        if (doctorOptional.isEmpty()) {
-           user.getRoles().add(roleRepository.findByName("DOCTOR"));
-            var doctor = new Doctor();
-            doctor.setUserId(user.getUserId());
-            doctor.setName(model.getName());
-            doctor.setMedicalCode(model.getMedicalCode());
-            doctor.setFamily(model.getFamily());
-            doctorRepository.save(doctor);
+        if (doctorOptional.isPresent()) {
+            throw new IllegalArgumentException();
         }
+
+        user.getRoles().add(roleRepository.findByName("DOCTOR"));
+        userRepository.save(user);
+
+        var doctor = new Doctor();
+        doctor.setUserId(user.getUserId());
+        doctor.setName(model.getName());
+        doctor.setMedicalCode(model.getMedicalCode());
+        doctor.setFamily(model.getFamily());
+        doctorRepository.save(doctor);
     }
 
     private void checkPassword(String pass, User user) {
