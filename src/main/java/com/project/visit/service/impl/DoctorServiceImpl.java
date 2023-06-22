@@ -120,6 +120,9 @@ public class DoctorServiceImpl implements DoctorService {
         FileOutputStream outputStream = new FileOutputStream(basePath + doctor.getMedicalCode(), true);
         outputStream.write(content);
         outputStream.close();
+
+        doctor.setPictureUrl(String.format("http://37.152.176.176:8899/doctor/image/%s", doctor.getMedicalCode()));
+        doctorRepository.save(doctor);
     }
 
     @Override

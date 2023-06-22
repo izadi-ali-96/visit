@@ -20,10 +20,12 @@ import java.util.Set;
 public interface DoctorResourceMapper {
 
     @Mapping(target = "tags", source = "expertise", qualifiedByName = "toTagName")
+    @Mapping(target = "pictureUrl", source = "pictureUrl")
     DoctorData toLightDoctorInfo(Doctor doctor);
 
     @Mapping(target = "tags", source = "expertise", qualifiedByName = "toTagName")
     @Mapping(target = "addressData", source = "addresses")
+    @Mapping(target = "pictureUrl", source = "pictureUrl")
     DoctorData toDoctorData(Doctor doctor);
 
     @Mapping(target = "id", source = "id")

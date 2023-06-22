@@ -29,6 +29,7 @@ public class Doctor implements Serializable {
     @Column(unique = true)
     private String medicalCode;
 
+    private String pictureUrl;
     private boolean active = false;
     @OneToMany(targetEntity = Address.class, mappedBy = "doctor", fetch = FetchType.LAZY)
     private Set<Address> addresses = new HashSet<>();
