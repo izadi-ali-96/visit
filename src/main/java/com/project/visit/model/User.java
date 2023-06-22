@@ -1,6 +1,7 @@
 package com.project.visit.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -42,7 +43,7 @@ public class User implements Serializable {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private List<Role> roles;
+	private HashSet<Role> roles;
 
 	public String getFullName() {
 		return name + " " + family;

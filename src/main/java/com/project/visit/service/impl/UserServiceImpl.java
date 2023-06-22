@@ -12,7 +12,6 @@ import com.project.visit.service.model.UserCreationModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -69,7 +68,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(model.getPassword());
 
         var role = roleRepository.findByName("USER");
-        user.setRoles(List.of(role));
+        user.getRoles().add(role);
 
         return userRepository.save(user);
     }
@@ -77,6 +76,7 @@ public class UserServiceImpl implements UserService {
     private void createNewDoctor(User user, UserCreationModel model) {
         var doctorOptional = doctorRepository.findByMedicalCode(model.getMedicalCode());
         if (doctorOptional.isEmpty()) {
+           user.getRoles().add(roleRepository.findByName("DOCTOR"));
             var doctor = new Doctor();
             doctor.setUserId(user.getUserId());
             doctor.setName(model.getName());
