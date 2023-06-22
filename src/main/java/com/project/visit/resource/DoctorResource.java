@@ -10,6 +10,8 @@ import com.project.visit.resource.response.ExpertiseResponse;
 import com.project.visit.service.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,6 +76,14 @@ public class DoctorResource {
         var context = RequestContextInterceptor.getCurrentContext();
         service.saveFile(file, context.getUserId());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/image/{medicalCode}")
+    ResponseEntity<Resource> getImage(@PathVariable("medicalCode") String code) throws IOException {
+        var result = service.getFile(code);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(result);
     }
 
 }

@@ -12,11 +12,14 @@ import com.project.visit.service.model.UserInfoModel;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -33,7 +36,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final ExpertiseRepository expertiseRepository;
 
-    private final static String path = "/Users/ali/Desktop/profile";
+    private final static String basePath = "/home/project/pic/";
 
     public List<Doctor> findDoctorByCity(Long cityId, List<Long> tags) {
         return doctorRepository.findDoctorsByCityId(cityId, tags);
@@ -112,9 +115,16 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void saveFile(MultipartFile file, String userId) throws IOException {
+        var doctor = doctorRepository.findByUserId(userId).orElseThrow(IllegalStateException::new);
         var content = file.getBytes();
-        FileOutputStream outputStream = new FileOutputStream(path + userId, true);
+        FileOutputStream outputStream = new FileOutputStream(basePath + doctor.getMedicalCode(), true);
         outputStream.write(content);
         outputStream.close();
+    }
+
+    @Override
+    public ByteArrayResource getFile(String medicalCode) throws IOException {
+        var path = Paths.get(basePath + medicalCode);
+        return new ByteArrayResource(Files.readAllBytes(path));
     }
 }
