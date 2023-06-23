@@ -38,6 +38,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final static String basePath = "/home/project/pic/";
 
+//    private final static String basePath = "/Users/ali/Desktop/test/";
+
+
     public List<Doctor> findDoctorByCity(Long cityId, List<Long> tags) {
         return doctorRepository.findDoctorsByCityId(cityId, tags);
     }

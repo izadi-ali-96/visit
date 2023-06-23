@@ -21,11 +21,13 @@ public interface DoctorResourceMapper {
 
     @Mapping(target = "tags", source = "expertise", qualifiedByName = "toTagName")
     @Mapping(target = "pictureUrl", source = "pictureUrl")
+    @Mapping(target = "description", source = "description")
     DoctorData toLightDoctorInfo(Doctor doctor);
 
     @Mapping(target = "tags", source = "expertise", qualifiedByName = "toTagName")
     @Mapping(target = "addressData", source = "addresses")
     @Mapping(target = "pictureUrl", source = "pictureUrl")
+    @Mapping(target = "description", source = "description")
     DoctorData toDoctorData(Doctor doctor);
 
     @Mapping(target = "id", source = "id")

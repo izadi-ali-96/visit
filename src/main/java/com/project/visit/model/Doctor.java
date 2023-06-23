@@ -30,6 +30,8 @@ public class Doctor implements Serializable {
     private String medicalCode;
 
     private String pictureUrl;
+
+    private String description;
     private boolean active = false;
     @OneToMany(targetEntity = Address.class, mappedBy = "doctor", fetch = FetchType.LAZY)
     private Set<Address> addresses = new HashSet<>();
