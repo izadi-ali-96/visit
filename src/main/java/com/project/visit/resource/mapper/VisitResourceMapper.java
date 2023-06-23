@@ -2,10 +2,13 @@ package com.project.visit.resource.mapper;
 
 import com.project.visit.model.Visit;
 import com.project.visit.resource.model.DoctorVisitInfo;
+import com.project.visit.resource.model.GenerateTimeModel;
 import com.project.visit.resource.model.UserVisitInfo;
 import com.project.visit.resource.model.VisitModel;
 import com.project.visit.resource.response.DoctorVisitInfoResponse;
+import com.project.visit.resource.response.GenerateTimeResponse;
 import com.project.visit.resource.response.UserVisitInfoResponse;
+import com.project.visit.service.model.TimeModel;
 import com.project.visit.service.model.VisitInfoModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -34,5 +37,11 @@ public interface VisitResourceMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "time", source = "time")
     UserVisitInfo toUserInfo(VisitInfoModel model);
+
+    default GenerateTimeResponse toGenerateTimeResponse(List<TimeModel> models) {
+        return new GenerateTimeResponse(models.stream().map(this::toGenerateTimeModel).toList());
+    }
+
+    GenerateTimeModel toGenerateTimeModel(TimeModel model);
 }
 

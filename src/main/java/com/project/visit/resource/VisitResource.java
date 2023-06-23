@@ -5,13 +5,12 @@ import com.project.visit.resource.mapper.VisitResourceMapper;
 import com.project.visit.resource.request.AssignRequestModel;
 import com.project.visit.resource.request.DoctorVisitInfoRequest;
 import com.project.visit.resource.request.GenerateVisitRequestMode;
-import com.project.visit.resource.response.AssignVisitResponse;
-import com.project.visit.resource.response.DoctorVisitInfoResponse;
-import com.project.visit.resource.response.UserVisitInfoResponse;
-import com.project.visit.resource.response.VisitResponseModel;
+import com.project.visit.resource.response.*;
+import com.project.visit.service.TimeConverterService;
 import com.project.visit.service.VisitService;
 import com.project.visit.service.model.GenerateVisitTimeInput;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +22,7 @@ public class VisitResource {
 
     private final VisitService service;
 
+    private final TimeConverterService converterService;
     private final VisitResourceMapper mapper;
 
     @PostMapping("/generate")
@@ -51,6 +51,11 @@ public class VisitResource {
         var context = RequestContextInterceptor.getCurrentContext();
         var result = service.getDoctorVisit(context.getUserId(), request.getFrom(), request.getTo(), request.getAddressId());
         return ResponseEntity.ok(mapper.toDoctorVisitInfoResponse(result));
+    }
+
+    @GetMapping("/calender/generate")
+    ResponseEntity<GenerateTimeResponse> generateTime(@NotBlank @RequestParam("time") String time, @RequestParam(value = "index", defaultValue = "0") Long index) {
+        return ResponseEntity.ok(mapper.toGenerateTimeResponse(converterService.getTime(time, index)));
     }
 
 }
