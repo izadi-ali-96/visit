@@ -18,4 +18,8 @@ public interface VisitServiceMapper {
     VisitInfoModel toVisitModel(Visit visit);
 
     List<VisitInfoModel> toVisitModel(List<Visit> visits);
+
+    default List<VisitInfoModel> toVisitLightModel(List<Visit> visits) {
+        return visits.stream().map(v -> new VisitInfoModel(v.getId(), v.getTime(), v.getUser() == null)).toList();
+    }
 }

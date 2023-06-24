@@ -31,7 +31,7 @@ public class Address implements Serializable {
 
 	private String path;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn
 	private Doctor doctor;
 

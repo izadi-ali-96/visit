@@ -14,8 +14,12 @@ public interface VisitService {
 
     void deleteVisit(Long visitId, String userId);
 
+    void unAssignVisit(Long visitId, String userId);
+
     List<VisitInfoModel> getUserVisits(String userId);
 
     List<VisitInfoModel> getDoctorVisit(String doctorId, Long from, Long to, Long addressId);
+
+    List<VisitInfoModel> getVisitOfDoctor(String doctorId, Long from, Long to, Long addressId);
 
 }

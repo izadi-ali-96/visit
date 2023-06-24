@@ -1,11 +1,11 @@
 package com.project.visit.service.impl;
 
+import com.project.visit.exception.DoctorException;
 import com.project.visit.exception.ResponseResult;
 import com.project.visit.exception.UserException;
 import com.project.visit.exception.VisitException;
 import com.project.visit.model.Visit;
 import com.project.visit.repository.AddressRepository;
-import com.project.visit.repository.DoctorRepository;
 import com.project.visit.repository.UserRepository;
 import com.project.visit.repository.VisitRepository;
 import com.project.visit.service.VisitService;
@@ -23,34 +23,31 @@ import java.util.List;
 public class VisitServiceImpl implements VisitService {
 
     private final VisitRepository visitRepository;
-
-    private final DoctorRepository doctorRepository;
-
     private final UserRepository userRepository;
 
     private final AddressRepository addressRepository;
 
     private final VisitServiceMapper mapper;
 
-    private static final int PERIOD = 20 * 60 * 1000;
+    private static final int PERIOD = 1200;
 
     @Override
     public List<Visit> generateVisitTimes(GenerateVisitTimeInput input) {
         var visit = new ArrayList<Visit>();
-        addressRepository.findByIdAndDoctorUserId(input.addressId(), input.userId()).ifPresent((address) -> {
-            doctorRepository.findByUserId(input.userId()).ifPresent(doctor -> {
-                var start = input.from();
-                while (start + PERIOD <= input.to()) {
-                    var v = new Visit();
-                    v.setDoctor(doctor);
-                    v.setTime(start);
-                    v.setAddress(address);
-                    visit.add(v);
-                    start = start + PERIOD;
-                }
-            });
-
-        });
+        var address = addressRepository.findByIdAndDoctorUserId(input.addressId(), input.userId()).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
+        var visits = visitRepository.findAllByDoctorUserIdAndAddressIdAndTimeBetween(address.getDoctor().getUserId(), address.getId(), input.from(), input.to());
+        if (!visits.isEmpty()) {
+            throw new VisitException(ResponseResult.VISIT_EXIST_IN_THIS_TIME);
+        }
+        var start = input.from();
+        while (start + PERIOD <= input.to()) {
+            var v = new Visit();
+            v.setDoctor(address.getDoctor());
+            v.setTime(start);
+            v.setAddress(address);
+            visit.add(v);
+            start = start + PERIOD;
+        }
         return visitRepository.saveAll(visit);
     }
 
@@ -67,21 +64,33 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public void deleteVisit(Long visitId, String userId) {
-        var visit = visitRepository.findById(visitId).orElseThrow(() -> new VisitException(ResponseResult.VISIT_NOT_FOUND));
-        if (!visit.getUser().getUserId().equals(userId)) {
-            throw new VisitException(ResponseResult.VISIT_NOT_BELONG_TO_USER);
-        }
-        visit.setUser(null);
-        visitRepository.save(visit);
+        var visit = visitRepository.findByIdAndDoctorUserId(visitId, userId).orElseThrow(() -> new VisitException(ResponseResult.VISIT_NOT_FOUND));
+        visitRepository.delete(visit);
     }
+
+    @Override
+    public void unAssignVisit(Long visitId, String userId) {
+        visitRepository.findByIdAndUserUserId(visitId, userId).ifPresent(v -> {
+            v.setUser(null);
+            visitRepository.save(v);
+        });
+    }
+
     @Override
     public List<VisitInfoModel> getUserVisits(String userId) {
         var result = visitRepository.findAllByUserUserId(userId);
         return mapper.toVisitModel(result);
     }
+
     @Override
     public List<VisitInfoModel> getDoctorVisit(String doctorId, Long from, Long to, Long addressId) {
         return mapper.toVisitModel(visitRepository.findAllByDoctorUserIdAndAddressIdAndTimeBetween(doctorId, addressId, from, to));
+    }
+
+    @Override
+    public List<VisitInfoModel> getVisitOfDoctor(String doctorId, Long from, Long to, Long addressId) {
+        var result = visitRepository.findAllByDoctorUserIdAndAddressIdAndTimeBetween(doctorId, addressId, from, to);
+        return mapper.toVisitLightModel(result);
     }
 
 }

@@ -15,6 +15,8 @@ public enum ResponseResult {
     VISIT_NOT_FOUND("2000", "visit.not.found"),
     VISIT_ASSIGNED("2001", "visit.assigned"),
 
+    VISIT_EXIST_IN_THIS_TIME("2001", "visit.exist.in.this.time"),
+
     VISIT_NOT_BELONG_TO_USER("2002", "visit.not.belong.to.user"),
 
     USER_NOT_FOUND("3000", "user.not.found"),

@@ -26,11 +26,11 @@ public class VisitResource {
     private final VisitResourceMapper mapper;
 
     @PostMapping("/generate")
-    ResponseEntity<VisitResponseModel> generateVisits(@RequestBody GenerateVisitRequestMode request) {
+    ResponseEntity<Void> generateVisits(@RequestBody GenerateVisitRequestMode request) {
         var context = RequestContextInterceptor.getCurrentContext();
         var req = new GenerateVisitTimeInput(request.from(), request.to(), context.getUserId(), request.addressId());
         var result = service.generateVisitTimes(req);
-        return ResponseEntity.ok(new VisitResponseModel(result));
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/assign")
@@ -52,6 +52,29 @@ public class VisitResource {
         var result = service.getDoctorVisit(context.getUserId(), request.getFrom(), request.getTo(), request.getAddressId());
         return ResponseEntity.ok(mapper.toDoctorVisitInfoResponse(result));
     }
+
+    @GetMapping("/doctor/light")
+    ResponseEntity<VisitLightResponse> getVisitsOfDoctor(@RequestBody DoctorVisitInfoRequest request) {
+        var context = RequestContextInterceptor.getCurrentContext();
+        var result = service.getVisitOfDoctor(context.getUserId(), request.getFrom(), request.getTo(), request.getAddressId());
+        return ResponseEntity.ok(mapper.toVisitLightResponse(result));
+    }
+
+
+    @DeleteMapping("/doctor/{visitId}/delete")
+    ResponseEntity<Void> deleteVisit(@PathVariable("visitId") Long visit) {
+        var context = RequestContextInterceptor.getCurrentContext();
+        service.deleteVisit(visit, context.getUserId());
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/visit/unassign/{visitId}")
+    ResponseEntity<Void> unAssignVisit(@PathVariable("visitId") Long visit) {
+        var context = RequestContextInterceptor.getCurrentContext();
+        service.unAssignVisit(visit, context.getUserId());
+        return ResponseEntity.ok().build();
+    }
+
 
     @GetMapping("/calender/generate")
     ResponseEntity<GenerateTimeResponse> generateTime(@NotBlank @RequestParam("time") String time, @RequestParam(value = "index", defaultValue = "0") Long index) {

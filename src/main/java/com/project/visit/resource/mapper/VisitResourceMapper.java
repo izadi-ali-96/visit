@@ -1,13 +1,11 @@
 package com.project.visit.resource.mapper;
 
 import com.project.visit.model.Visit;
-import com.project.visit.resource.model.DoctorVisitInfo;
-import com.project.visit.resource.model.GenerateTimeModel;
-import com.project.visit.resource.model.UserVisitInfo;
-import com.project.visit.resource.model.VisitModel;
+import com.project.visit.resource.model.*;
 import com.project.visit.resource.response.DoctorVisitInfoResponse;
 import com.project.visit.resource.response.GenerateTimeResponse;
 import com.project.visit.resource.response.UserVisitInfoResponse;
+import com.project.visit.resource.response.VisitLightResponse;
 import com.project.visit.service.model.TimeModel;
 import com.project.visit.service.model.VisitInfoModel;
 import org.mapstruct.Mapper;
@@ -26,6 +24,13 @@ public interface VisitResourceMapper {
         return new DoctorVisitInfoResponse(models.stream().map(this::toDoctorInfo).toList());
     }
 
+    default VisitLightResponse toVisitLightResponse(List<VisitInfoModel> models) {
+        return new VisitLightResponse(models.stream().map(v -> new VisitLightModel(v.id(), v.time(), null, v.active())).toList());
+    }
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "time", source = "time")
+    @Mapping(target = "userId", source = "userName")
     DoctorVisitInfo toDoctorInfo(VisitInfoModel model);
 
     default UserVisitInfoResponse toUserVisitInfoResponse(List<VisitInfoModel> models) {
