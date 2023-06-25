@@ -12,6 +12,7 @@ import com.project.visit.service.model.GenerateVisitTimeInput;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +54,7 @@ public class VisitResource {
         return ResponseEntity.ok(mapper.toDoctorVisitInfoResponse(result));
     }
 
-    @GetMapping("/doctor/light")
+    @GetMapping(value = "/doctor/light", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<VisitLightResponse> getVisitsOfDoctor(@RequestBody DoctorVisitInfoRequest request) {
         var result = service.getVisitOfDoctor(request.getFrom(), request.getTo(), request.getAddressId());
         return ResponseEntity.ok(mapper.toVisitLightResponse(result));
