@@ -55,8 +55,7 @@ public class VisitResource {
 
     @GetMapping("/doctor/light")
     ResponseEntity<VisitLightResponse> getVisitsOfDoctor(@RequestBody DoctorVisitInfoRequest request) {
-        var context = RequestContextInterceptor.getCurrentContext();
-        var result = service.getVisitOfDoctor(context.getUserId(), request.getFrom(), request.getTo(), request.getAddressId());
+        var result = service.getVisitOfDoctor(request.getFrom(), request.getTo(), request.getAddressId());
         return ResponseEntity.ok(mapper.toVisitLightResponse(result));
     }
 

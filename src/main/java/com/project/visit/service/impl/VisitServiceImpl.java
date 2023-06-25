@@ -88,8 +88,8 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public List<VisitInfoModel> getVisitOfDoctor(String doctorId, Long from, Long to, Long addressId) {
-        var result = visitRepository.findAllByDoctorUserIdAndAddressIdAndTimeBetween(doctorId, addressId, from, to);
+    public List<VisitInfoModel> getVisitOfDoctor(Long from, Long to, Long addressId) {
+        var result = visitRepository.findAllByAddressIdAndTimeBetween(addressId, from, to);
         return mapper.toVisitLightModel(result);
     }
 

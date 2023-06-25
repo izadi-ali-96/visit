@@ -20,6 +20,6 @@ public interface VisitService {
 
     List<VisitInfoModel> getDoctorVisit(String doctorId, Long from, Long to, Long addressId);
 
-    List<VisitInfoModel> getVisitOfDoctor(String doctorId, Long from, Long to, Long addressId);
+    List<VisitInfoModel> getVisitOfDoctor(Long from, Long to, Long addressId);
 
 }

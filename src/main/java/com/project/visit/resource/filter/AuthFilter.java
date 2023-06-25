@@ -45,7 +45,7 @@ public class AuthFilter extends OncePerRequestFilter {
             Pattern.compile("^/visit/generate$"), "DOCTOR",
             Pattern.compile("^/visit/assign$"), "USER",
             Pattern.compile("^/visit/user$"), "USER",
-            Pattern.compile("^/visit/d$octor/light$"), "USER",
+            Pattern.compile("^/visit/doctor/light$"), "USER",
             Pattern.compile("^/visit/unassign/.*\\d$"), "USER",
             Pattern.compile("^/doctor/.*\\d/delete$"), "DOCTOR"
     );
