@@ -47,14 +47,14 @@ public class VisitResource {
         return ResponseEntity.ok(mapper.toUserVisitInfoResponse(result));
     }
 
-    @GetMapping("/doctor")
+    @PostMapping("/doctor")
     ResponseEntity<DoctorVisitInfoResponse> getUserVisit(@RequestBody DoctorVisitInfoRequest request) {
         var context = RequestContextInterceptor.getCurrentContext();
         var result = service.getDoctorVisit(context.getUserId(), request.getFrom(), request.getTo(), request.getAddressId());
         return ResponseEntity.ok(mapper.toDoctorVisitInfoResponse(result));
     }
 
-    @GetMapping(value = "/doctor/light", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/doctor/light", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<VisitLightResponse> getVisitsOfDoctor(@RequestBody DoctorVisitInfoRequest request) {
         var result = service.getVisitOfDoctor(request.getFrom(), request.getTo(), request.getAddressId());
         return ResponseEntity.ok(mapper.toVisitLightResponse(result));
