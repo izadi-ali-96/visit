@@ -1,7 +1,8 @@
 package com.project.visit.service.model;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public record VisitInfoModel(Long id, String userId, String doctorName, String userName, Long time, String path,
                              String hourAndMin, boolean active) {
@@ -11,7 +12,7 @@ public record VisitInfoModel(Long id, String userId, String doctorName, String u
     }
 
     public static String getTime(Long time) {
-        var a = LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.UTC);
+        var a = ZonedDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("Asia/Tehran"));
         return String.format("%s:%s", a.getHour(), a.getMinute());
     }
 

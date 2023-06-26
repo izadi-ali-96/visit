@@ -29,7 +29,7 @@ public class VisitServiceImpl implements VisitService {
 
     private final VisitServiceMapper mapper;
 
-    private static final int PERIOD = 1200;
+    private static final int PERIOD = 1200000;
 
     @Override
     public List<Visit> generateVisitTimes(GenerateVisitTimeInput input) {
@@ -39,8 +39,11 @@ public class VisitServiceImpl implements VisitService {
         if (!visits.isEmpty()) {
             throw new VisitException(ResponseResult.VISIT_EXIST_IN_THIS_TIME);
         }
+
+
         var start = input.from();
-        while (start + PERIOD <= input.to()) {
+        var end = input.to();
+        while (start + PERIOD <= end) {
             var v = new Visit();
             v.setDoctor(address.getDoctor());
             v.setTime(start);
