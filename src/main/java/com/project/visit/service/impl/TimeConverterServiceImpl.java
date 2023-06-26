@@ -2,26 +2,31 @@ package com.project.visit.service.impl;
 
 import com.github.eloyzone.jalalicalendar.DateConverter;
 import com.project.visit.service.TimeConverterService;
+import com.project.visit.service.VisitService;
+import com.project.visit.service.model.TimeAndVisitInfoModel;
 import com.project.visit.service.model.TimeModel;
+import com.project.visit.service.model.VisitInfoModel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 
 @Service
+@RequiredArgsConstructor
 public class TimeConverterServiceImpl implements TimeConverterService {
 
+    private final VisitService service;
+
     @Override
-    public List<TimeModel> getTime(String time, long index) {
+    public TimeAndVisitInfoModel getTime(Long addressId, String time, long index) {
         var converter = new DateConverter();
-        List<TimeModel> models = new ArrayList<>();
-        var localDate = LocalDateTime.parse(time).plus(index, ChronoUnit.WEEKS);
-        for (int d = 0; d < 7; d++) {
-            models.add(new TimeModel(localDate.toLocalDate(), converter));
-            localDate = localDate.plusDays(1);
-        }
-        return models;
+        var localDate = LocalDateTime.parse(time).plus(index, ChronoUnit.DAYS);
+        var model = new TimeModel(localDate.toLocalDate(), converter);
+
+        var result = service.getVisitOfDoctor(model.getFrom(), model.getTo(), addressId);
+        result = result.stream().sorted(Comparator.comparingLong(VisitInfoModel::time)).toList();
+        return new TimeAndVisitInfoModel(result, model);
     }
 }

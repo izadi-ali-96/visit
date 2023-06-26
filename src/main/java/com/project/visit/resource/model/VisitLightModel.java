@@ -11,7 +11,7 @@ public class VisitLightModel {
 
     Long id;
 
-    Long time;
+    String time;
 
     String userId;
 

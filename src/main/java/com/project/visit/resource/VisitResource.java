@@ -5,14 +5,16 @@ import com.project.visit.resource.mapper.VisitResourceMapper;
 import com.project.visit.resource.request.AssignRequestModel;
 import com.project.visit.resource.request.DoctorVisitInfoRequest;
 import com.project.visit.resource.request.GenerateVisitRequestMode;
-import com.project.visit.resource.response.*;
+import com.project.visit.resource.response.AssignVisitResponse;
+import com.project.visit.resource.response.DoctorVisitInfoResponse;
+import com.project.visit.resource.response.GenerateTimeResponse;
+import com.project.visit.resource.response.UserVisitInfoResponse;
 import com.project.visit.service.TimeConverterService;
 import com.project.visit.service.VisitService;
 import com.project.visit.service.model.GenerateVisitTimeInput;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,11 +56,11 @@ public class VisitResource {
         return ResponseEntity.ok(mapper.toDoctorVisitInfoResponse(result));
     }
 
-    @PostMapping(value = "/doctor/light", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<VisitLightResponse> getVisitsOfDoctor(@RequestBody DoctorVisitInfoRequest request) {
-        var result = service.getVisitOfDoctor(request.getFrom(), request.getTo(), request.getAddressId());
-        return ResponseEntity.ok(mapper.toVisitLightResponse(result));
-    }
+//    @PostMapping(value = "/doctor/light", produces = MediaType.APPLICATION_JSON_VALUE)
+//    ResponseEntity<VisitLightResponse> getVisitsOfDoctor(@RequestBody DoctorVisitInfoRequest request) {
+//        var result = service.getVisitOfDoctor(request.getFrom(), request.getTo(), request.getAddressId());
+//        return ResponseEntity.ok(mapper.toVisitLightResponse(result));
+//    }
 
 
     @DeleteMapping("/doctor/{visitId}/delete")
@@ -77,8 +79,8 @@ public class VisitResource {
 
 
     @GetMapping("/calender/generate")
-    ResponseEntity<GenerateTimeResponse> generateTime(@NotBlank @RequestParam("time") String time, @RequestParam(value = "index", defaultValue = "0") Long index) {
-        return ResponseEntity.ok(mapper.toGenerateTimeResponse(converterService.getTime(time, index)));
+    ResponseEntity<GenerateTimeResponse> generateTime(@NotBlank @RequestParam("time") String time, @RequestParam(value = "index", defaultValue = "0") Long index, @RequestParam(value = "addressId", defaultValue = "0") Long addressId) {
+        return ResponseEntity.ok(mapper.toGenerateTimeResponse(converterService.getTime(addressId, time, index)));
     }
 
 }
