@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 
@@ -22,7 +23,7 @@ public class TimeConverterServiceImpl implements TimeConverterService {
     @Override
     public TimeAndVisitInfoModel getTime(Long addressId, String time, long index) {
         var converter = new DateConverter();
-        var localDate = LocalDateTime.now().plus(index, ChronoUnit.DAYS);
+        var localDate = LocalDateTime.now(ZoneId.of("Asia/Tehran")).plus(index, ChronoUnit.DAYS);
         var model = new TimeModel(localDate.toLocalDate(), converter);
 
         var result = service.getVisitOfDoctor(model.getFrom(), model.getTo(), addressId);
