@@ -22,7 +22,7 @@ public class TimeConverterServiceImpl implements TimeConverterService {
     @Override
     public TimeAndVisitInfoModel getTime(Long addressId, String time, long index) {
         var converter = new DateConverter();
-        var localDate = LocalDateTime.parse(time).plus(index, ChronoUnit.DAYS);
+        var localDate = LocalDateTime.now().plus(index, ChronoUnit.DAYS);
         var model = new TimeModel(localDate.toLocalDate(), converter);
 
         var result = service.getVisitOfDoctor(model.getFrom(), model.getTo(), addressId);

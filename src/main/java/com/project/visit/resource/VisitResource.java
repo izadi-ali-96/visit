@@ -13,7 +13,6 @@ import com.project.visit.service.TimeConverterService;
 import com.project.visit.service.VisitService;
 import com.project.visit.service.model.GenerateVisitTimeInput;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,9 +77,9 @@ public class VisitResource {
     }
 
 
-    @GetMapping("/calender/generate")
-    ResponseEntity<GenerateTimeResponse> generateTime(@NotBlank @RequestParam("time") String time, @RequestParam(value = "index", defaultValue = "0") Long index, @RequestParam(value = "addressId", defaultValue = "0") Long addressId) {
-        return ResponseEntity.ok(mapper.toGenerateTimeResponse(converterService.getTime(addressId, time, index)));
+    @GetMapping("/list")
+    ResponseEntity<GenerateTimeResponse> generateTime(@RequestParam(value = "index", defaultValue = "0") Long index, @RequestParam(value = "addressId", defaultValue = "0") Long addressId) {
+        return ResponseEntity.ok(mapper.toGenerateTimeResponse(converterService.getTime(addressId, null, index)));
     }
 
 }
