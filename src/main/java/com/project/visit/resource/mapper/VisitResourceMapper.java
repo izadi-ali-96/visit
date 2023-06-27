@@ -51,7 +51,8 @@ public interface VisitResourceMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "time", source = "hourAndMin")
-    @Mapping(target = "active", expression = "java(model.userId() == null ? true : false)")
+    @Mapping(target = "active", source = "active")
     VisitLightModel toVisit(VisitInfoModel model);
+
 }
 
