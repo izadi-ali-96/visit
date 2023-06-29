@@ -14,6 +14,8 @@ public interface CommentResourceMapper {
     @Mapping(target = "comment", source = "comment")
     @Mapping(target = "user", source = "fullName")
     @Mapping(target = "date", source = "date")
+    @Mapping(target = "removable", source = "removable")
+    @Mapping(target = "id", source = "commentId")
     CommentModel toCommentModel(CommentServiceModel comment);
 
 

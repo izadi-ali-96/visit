@@ -1,4 +1,4 @@
 package com.project.visit.service.model;
 
-public record CommentServiceModel(String fullName, String comment, String date) {
+public record CommentServiceModel(Long commentId, String fullName, String comment, String date, boolean removable) {
 }

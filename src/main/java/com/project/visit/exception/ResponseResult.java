@@ -11,6 +11,8 @@ public enum ResponseResult {
     ADDRESS_NOT_FOUND("101", "address.not.found"),
     CITY_NOT_FOUND("102", "city.not.found"),
 
+    COMMENT_NOT_FOUND("103", "comment.not.found"),
+
     INVALID_ACCESS("1000", "invalid.access"),
     VISIT_NOT_FOUND("2000", "visit.not.found"),
     VISIT_ASSIGNED("2001", "visit.assigned"),
@@ -27,6 +29,8 @@ public enum ResponseResult {
     TOKEN_EXPIRE("5005", "token.expire"),
 
     INVALID_COMMENT_OWNER("6000", "invalid.comment.owner");
+
+
     private final String code;
 
     private final String message;

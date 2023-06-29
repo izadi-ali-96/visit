@@ -1,9 +1,6 @@
 package com.project.visit.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +13,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String comment;
 
     private String userId;

@@ -137,7 +137,7 @@ public class DoctorServiceImpl implements DoctorService {
         outputStream.write(content);
         outputStream.close();
 
-        doctor.setPictureUrl(String.format("http://37.152.176.176:8899/doctor/image/%s", doctor.getMedicalCode()));
+        doctor.setPictureUrl(String.format("http://185.126.200.26:8899/doctor/image/%s", doctor.getMedicalCode()));
         doctorRepository.save(doctor);
     }
 

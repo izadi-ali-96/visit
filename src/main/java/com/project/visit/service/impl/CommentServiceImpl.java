@@ -2,6 +2,7 @@ package com.project.visit.service.impl;
 
 import com.github.eloyzone.jalalicalendar.DateConverter;
 import com.github.eloyzone.jalalicalendar.JalaliDateFormatter;
+import com.project.visit.exception.CommentException;
 import com.project.visit.exception.DoctorException;
 import com.project.visit.exception.ResponseResult;
 import com.project.visit.exception.UserException;
@@ -9,6 +10,7 @@ import com.project.visit.model.Comment;
 import com.project.visit.repository.CommentRepository;
 import com.project.visit.repository.DoctorRepository;
 import com.project.visit.repository.UserRepository;
+import com.project.visit.resource.filter.RequestContextInterceptor;
 import com.project.visit.service.CommentService;
 import com.project.visit.service.model.CommentServiceModel;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +43,11 @@ public class CommentServiceImpl implements CommentService {
             var jalaliDate = converter.gregorianToJalali(time.getYear(), time.getMonth(), time.getDayOfMonth());
             var persianTime = jalaliDate.format(new JalaliDateFormatter("yyyy M dd", JalaliDateFormatter.FORMAT_IN_PERSIAN));
 
-            return new CommentServiceModel(user.getFullName(), c.getComment(), persianTime);
+            var context = RequestContextInterceptor.getCurrentContext();
+            if (context.getUserId() != null && c.getUserId().equals(context.getUserId())) {
+                return new CommentServiceModel(c.getId(), user.getFullName(), c.getComment(), persianTime, true);
+            }
+            return new CommentServiceModel(c.getId(), user.getFullName(), c.getComment(), persianTime, false);
         }).toList();
     }
 
@@ -60,5 +66,15 @@ public class CommentServiceImpl implements CommentService {
         comment.setUserId(user.getUserId());
         comment.setCreationDate(Instant.now().getEpochSecond());
         repository.save(comment);
+    }
+
+    @Override
+    public void deleteComment(Long commentId, String userId) {
+        var comment = repository.findById(commentId).orElseThrow(() -> new CommentException(ResponseResult.COMMENT_NOT_FOUND));
+        if (comment.getUserId().equals(userId)) {
+            repository.delete(comment);
+        } else {
+            throw new CommentException(ResponseResult.INVALID_COMMENT_OWNER);
+        }
     }
 }

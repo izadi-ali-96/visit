@@ -35,7 +35,6 @@ public class AuthFilter extends OncePerRequestFilter {
             Pattern.compile("^/visit/list$"),
             Pattern.compile("^/visit/doctor/light$"),
             Pattern.compile("^/doctor/.*\\d$"),
-            Pattern.compile("^/comment/.*\\d$"),
             Pattern.compile("^/doctor/image/.*\\d$"),
             Pattern.compile("^/location"),
             Pattern.compile("^/visit/doctor$")
@@ -53,6 +52,7 @@ public class AuthFilter extends OncePerRequestFilter {
         map.put(Pattern.compile("^/visit/assign$"), "USER");
         map.put(Pattern.compile("^/visit/user$"), "USER");
         map.put(Pattern.compile("^/comment/add$"), "USER");
+        map.put(Pattern.compile("^/comment/delete/.*\\w$"), "USER");
         map.put(Pattern.compile("^/visit/doctor/light$"), "USER");
         map.put(Pattern.compile("^/visit/unassign/.*\\d$"), "USER");
         map.put(Pattern.compile("^/doctor/.*\\d/delete$"), "DOCTOR");
@@ -61,6 +61,17 @@ public class AuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        if (Pattern.compile("^/comment/.*\\d$").matcher(request.getRequestURI()).find()) {
+            var mutableRequest = new MutableHttpServletRequest(request);
+            if (!request.getHeader("Authorization").isBlank()) {
+                var authModel = authService.checkToken(request.getHeader("Authorization"));
+                mutableRequest.putHeader(Constants.REQUEST_HEADER_USER_ID, authModel.username());
+            } else {
+                mutableRequest.putHeader(Constants.REQUEST_HEADER_USER_ID, null);
+            }
+            filterChain.doFilter(mutableRequest, response);
+        }
 
         if (checkPublicUrls(request.getRequestURI())) {
             filterChain.doFilter(request, response);

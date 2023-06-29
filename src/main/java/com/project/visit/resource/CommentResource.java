@@ -30,5 +30,12 @@ public class CommentResource {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/delete/{commentId}")
+    ResponseEntity<Void> setComment(@PathVariable("commentId") Long id) {
+        var context = RequestContextInterceptor.getCurrentContext();
+        service.deleteComment(id, context.getUserId());
+        return ResponseEntity.ok().build();
+    }
+
 
 }
