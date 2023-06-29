@@ -64,7 +64,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
         if (Pattern.compile("^/comment/doctor/.*\\d$").matcher(request.getRequestURI()).find()) {
             var mutableRequest = new MutableHttpServletRequest(request);
-            if (!request.getHeader("Authorization").isBlank()) {
+            if (request.getHeader("Authorization") != null) {
                 var authModel = authService.checkToken(request.getHeader("Authorization"));
                 mutableRequest.putHeader(Constants.REQUEST_HEADER_USER_ID, authModel.username());
             } else {
