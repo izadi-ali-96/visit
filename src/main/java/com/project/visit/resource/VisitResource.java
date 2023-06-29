@@ -69,7 +69,7 @@ public class VisitResource {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/visit/unassign/{visitId}")
+    @DeleteMapping("/unassign/{visitId}")
     ResponseEntity<Void> unAssignVisit(@PathVariable("visitId") Long visit) {
         var context = RequestContextInterceptor.getCurrentContext();
         service.unAssignVisit(visit, context.getUserId());
