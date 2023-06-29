@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -39,18 +40,22 @@ public class AuthFilter extends OncePerRequestFilter {
             Pattern.compile("^/visit/doctor$")
     );
 
-    private static final Map<Pattern, String> PERMIT_URLS = Map.of(
-            Pattern.compile("^/doctor/add/expertise$"), "DOCTOR",
-            Pattern.compile("^/doctor/image$"), "DOCTOR",
-            Pattern.compile("^/doctor/address/.*\\d$"), "DOCTOR",
-            Pattern.compile("^/visit/generate$"), "DOCTOR",
-            Pattern.compile("^/visit/assign$"), "USER",
-            Pattern.compile("^/visit/user$"), "USER",
-            Pattern.compile("^/comment/add$"), "USER",
-            Pattern.compile("^/visit/doctor/light$"), "USER",
-            Pattern.compile("^/visit/unassign/.*\\d$"), "USER",
-            Pattern.compile("^/doctor/.*\\d/delete$"), "DOCTOR"
-    );
+    private final Map<Pattern, String> PERMIT_URLS() {
+        var map = new HashMap<Pattern, String>();
+        map.put(Pattern.compile("^/doctor/add/expertise$"), "DOCTOR");
+        map.put(Pattern.compile("^/doctor/info$"), "DOCTOR");
+        map.put(Pattern.compile("^/doctor/image$"), "DOCTOR");
+        map.put(Pattern.compile("^/doctor/address/.*\\d$"), "DOCTOR");
+        map.put(Pattern.compile("^/doctor/address$"), "DOCTOR");
+        map.put(Pattern.compile("^/visit/generate$"), "DOCTOR");
+        map.put(Pattern.compile("^/visit/assign$"), "USER");
+        map.put(Pattern.compile("^/visit/user$"), "USER");
+        map.put(Pattern.compile("^/comment/add$"), "USER");
+        map.put(Pattern.compile("^/visit/doctor/light$"), "USER");
+        map.put(Pattern.compile("^/visit/unassign/.*\\d$"), "USER");
+        map.put(Pattern.compile("^/doctor/.*\\d/delete$"), "DOCTOR");
+        return map;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -70,7 +75,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
     void checkApiPermission(String url, List<String> roles) {
         var permit = false;
-        for (var pattern : PERMIT_URLS.entrySet()) {
+        for (var pattern : PERMIT_URLS().entrySet()) {
             if (pattern.getKey().matcher(url).find()) {
                 permit = roles.contains(pattern.getValue());
                 break;
