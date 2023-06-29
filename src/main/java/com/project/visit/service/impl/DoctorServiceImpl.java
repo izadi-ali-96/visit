@@ -126,6 +126,7 @@ public class DoctorServiceImpl implements DoctorService {
     public void setExpertise(String userId, List<Long> expertise) {
         doctorRepository.findByUserId(userId).ifPresent(doctor -> {
             doctor.setExpertise(expertiseRepository.findAllByIdIn(expertise));
+            doctorRepository.save(doctor);
         });
     }
 

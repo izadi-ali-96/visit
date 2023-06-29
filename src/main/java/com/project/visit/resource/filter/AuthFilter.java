@@ -62,7 +62,7 @@ public class AuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (Pattern.compile("^/comment/.*\\d$").matcher(request.getRequestURI()).find()) {
+        if (Pattern.compile("^/comment/doctor/.*\\d$").matcher(request.getRequestURI()).find()) {
             var mutableRequest = new MutableHttpServletRequest(request);
             if (!request.getHeader("Authorization").isBlank()) {
                 var authModel = authService.checkToken(request.getHeader("Authorization"));

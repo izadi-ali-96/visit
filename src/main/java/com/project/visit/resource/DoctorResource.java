@@ -2,6 +2,7 @@ package com.project.visit.resource;
 
 import com.project.visit.resource.filter.RequestContextInterceptor;
 import com.project.visit.resource.mapper.DoctorResourceMapper;
+import com.project.visit.resource.request.AddExpertiseRequest;
 import com.project.visit.resource.request.AddressRequestModel;
 import com.project.visit.resource.request.UpdateUserInfoRequestModel;
 import com.project.visit.resource.response.DoctorListResponseModel;
@@ -53,9 +54,9 @@ public class DoctorResource {
     }
 
     @PostMapping("/add/expertise")
-    ResponseEntity<Void> setExpertise(@RequestParam("expertise") List<Long> expertise) {
+    ResponseEntity<Void> setExpertise(@RequestBody AddExpertiseRequest request) {
         var context = RequestContextInterceptor.getCurrentContext();
-        service.setExpertise(context.getUserId(), expertise);
+        service.setExpertise(context.getUserId(), request.getExpertise());
         return ResponseEntity.ok().build();
     }
 
