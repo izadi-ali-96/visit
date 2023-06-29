@@ -37,7 +37,7 @@ public class AuthFilter extends OncePerRequestFilter {
             Pattern.compile("^/doctor/\\d$"),
             Pattern.compile("^/comment/.*\\d$"),
             Pattern.compile("^/doctor/image/\\d$"),
-            Pattern.compile("^/location/.*\\d$"),
+            Pattern.compile("^/location"),
             Pattern.compile("^/visit/doctor$")
     );
 
