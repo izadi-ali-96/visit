@@ -18,7 +18,7 @@ public class CommentResource {
 
     private final CommentResourceMapper mapper;
 
-    @GetMapping
+    @GetMapping("/{doctorId}")
     ResponseEntity<CommentResponse> getComment(@PathVariable("doctorId") String doctorId) {
         return ResponseEntity.ok(mapper.toCommentResponse(service.getComments(doctorId)));
     }

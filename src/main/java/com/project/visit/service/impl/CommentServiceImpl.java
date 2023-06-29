@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void addComment(String description, String userId, String doctorId) {
         var doctor = doctorRepository.findByDoctorId(doctorId).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
-        var user = userRepository.findByUserId(doctorId).orElseThrow(() -> new UserException(ResponseResult.DOCTOR_NOT_FOUND));
+        var user = userRepository.findByUserId(userId).orElseThrow(() -> new UserException(ResponseResult.DOCTOR_NOT_FOUND));
 
         var comment = new Comment();
         comment.setComment(description);
