@@ -5,16 +5,17 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Entity
 @Getter
 @Setter
-public class Expertise implements Serializable {
+public class Comment {
 
     @Id
     private long id;
 
-    private String name;
+    private String comment;
 
+    private String userId;
+
+    private String doctorId;
 }

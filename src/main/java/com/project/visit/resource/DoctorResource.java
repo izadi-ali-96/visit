@@ -46,6 +46,13 @@ public class DoctorResource {
         return ResponseEntity.ok(new ExpertiseResponse(result));
     }
 
+    @PostMapping("/add/expertise")
+    ResponseEntity<Void> setExpertise(@RequestParam("expertise") List<Long> expertise) {
+        var context = RequestContextInterceptor.getCurrentContext();
+        service.setExpertise(context.getUserId(), expertise);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/info")
     ResponseEntity<Void> updateDoctorInfo(@Valid @RequestBody UpdateUserInfoRequestModel request) {
         service.updateDoctorInfo(mapper.toUserInfoModel(request, RequestContextInterceptor.getCurrentContext().getUserId()));

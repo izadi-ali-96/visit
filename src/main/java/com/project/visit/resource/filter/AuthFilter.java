@@ -33,18 +33,20 @@ public class AuthFilter extends OncePerRequestFilter {
             Pattern.compile("^/visit/list$"),
             Pattern.compile("^/visit/doctor/light$"),
             Pattern.compile("/doctor/\\d"),
+            Pattern.compile("/comment"),
             Pattern.compile("/doctor/image/\\d"),
             Pattern.compile("/location/\\w"),
             Pattern.compile("^/visit/doctor$")
     );
 
     private static final Map<Pattern, String> PERMIT_URLS = Map.of(
-            Pattern.compile("^/doctor/address$"), "DOCTOR",
+            Pattern.compile("^/doctor/add/expertise$"), "DOCTOR",
             Pattern.compile("^/doctor/image$"), "DOCTOR",
             Pattern.compile("^/doctor/address/.*\\d$"), "DOCTOR",
             Pattern.compile("^/visit/generate$"), "DOCTOR",
             Pattern.compile("^/visit/assign$"), "USER",
             Pattern.compile("^/visit/user$"), "USER",
+            Pattern.compile("^/comment/add$"), "USER",
             Pattern.compile("^/visit/doctor/light$"), "USER",
             Pattern.compile("^/visit/unassign/.*\\d$"), "USER",
             Pattern.compile("^/doctor/.*\\d/delete$"), "DOCTOR"

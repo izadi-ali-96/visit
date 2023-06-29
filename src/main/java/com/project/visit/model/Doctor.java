@@ -23,6 +23,8 @@ public class Doctor implements Serializable {
     @Column(unique = true)
     private String userId;
 
+    @Column(unique = true)
+    private String doctorId;
     private String name;
 
     private String family;

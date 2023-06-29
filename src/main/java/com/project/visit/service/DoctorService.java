@@ -27,6 +27,7 @@ public interface DoctorService {
 
     List<Expertise> getExpertise();
 
+    void setExpertise(String userId, List<Long> expertise);
     void saveFile(MultipartFile file, String userId) throws IOException;
 
     ByteArrayResource getFile(String medicalCode) throws IOException;

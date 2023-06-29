@@ -117,6 +117,13 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public void setExpertise(String userId, List<Long> expertise) {
+        doctorRepository.findByUserId(userId).ifPresent(doctor -> {
+            doctor.setExpertise(expertiseRepository.findAllByIdIn(expertise));
+        });
+    }
+
+    @Override
     public void saveFile(MultipartFile file, String userId) throws IOException {
         var doctor = doctorRepository.findByUserId(userId).orElseThrow(IllegalStateException::new);
         var content = file.getBytes();
