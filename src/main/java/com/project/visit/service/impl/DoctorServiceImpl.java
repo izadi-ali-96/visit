@@ -52,6 +52,12 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public Doctor findDoctorByUserId(String code) {
+        return doctorRepository.findByUserId(code)
+                .orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
+    }
+
+    @Override
     @Transactional
     public void updateDoctorInfo(UserInfoModel model) {
         doctorRepository.findByUserId(model.getUserId()).ifPresent(doctor -> {

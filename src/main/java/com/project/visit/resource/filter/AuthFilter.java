@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -40,13 +41,14 @@ public class AuthFilter extends OncePerRequestFilter {
             Pattern.compile("^/visit/doctor$")
     );
 
-    private final Map<Pattern, String> PERMIT_URLS() {
+    private Map<Pattern, String> PERMIT_URLS() {
         var map = new HashMap<Pattern, String>();
         map.put(Pattern.compile("^/doctor/add/expertise$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/info$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/image$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/address/.*\\d$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/address$"), "DOCTOR");
+        map.put(Pattern.compile("^/doctor/profile$"), "DOCTOR");
         map.put(Pattern.compile("^/visit/generate$"), "DOCTOR");
         map.put(Pattern.compile("^/visit/assign$"), "USER");
         map.put(Pattern.compile("^/visit/user$"), "USER");
@@ -64,13 +66,15 @@ public class AuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        var authModel = authService.checkToken(request.getHeader("Authorization"));
-        checkApiPermission(request.getRequestURI(), authModel.roles());
-
-        var mutableRequest = new MutableHttpServletRequest(request);
-        mutableRequest.putHeader(Constants.REQUEST_HEADER_USER_ID, authModel.username());
-
-        filterChain.doFilter(mutableRequest, response);
+        try {
+            var authModel = authService.checkToken(request.getHeader("Authorization"));
+            checkApiPermission(request.getRequestURI(), authModel.roles());
+            var mutableRequest = new MutableHttpServletRequest(request);
+            mutableRequest.putHeader(Constants.REQUEST_HEADER_USER_ID, authModel.username());
+            filterChain.doFilter(mutableRequest, response);
+        } catch (AuthException ex) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        }
     }
 
     void checkApiPermission(String url, List<String> roles) {

@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
         doctor.setName(model.getName());
         doctor.setMedicalCode(model.getMedicalCode());
         doctor.setFamily(model.getFamily());
-        doctor.setUserId(UUID.randomUUID().toString());
+        doctor.setDoctorId(UUID.randomUUID().toString());
         doctorRepository.save(doctor);
     }
 

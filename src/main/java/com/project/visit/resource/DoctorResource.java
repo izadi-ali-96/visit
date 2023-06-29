@@ -36,8 +36,14 @@ public class DoctorResource {
     }
 
     @GetMapping("/{medicalCode}")
-    ResponseEntity<DoctorResponseModel> getDoctor(@PathVariable("medicalCode") String code) {
+    ResponseEntity<DoctorResponseModel> getDoctorByMedicalCode(@PathVariable("medicalCode") String code) {
         return ResponseEntity.ok(new DoctorResponseModel(mapper.toDoctorData(service.findDoctor(code))));
+    }
+
+    @GetMapping("/profile")
+    ResponseEntity<DoctorResponseModel> getDoctorByUserId() {
+        var context = RequestContextInterceptor.getCurrentContext();
+        return ResponseEntity.ok(new DoctorResponseModel(mapper.toDoctorData(service.findDoctorByUserId(context.getUserId()))));
     }
 
     @GetMapping("/expertise")
