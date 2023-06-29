@@ -2,9 +2,10 @@ package com.project.visit.resource;
 
 import com.project.visit.resource.filter.RequestContextInterceptor;
 import com.project.visit.resource.mapper.DoctorResourceMapper;
-import com.project.visit.resource.request.AddExpertiseRequest;
 import com.project.visit.resource.request.AddressRequestModel;
+import com.project.visit.resource.request.ExpertiseRequest;
 import com.project.visit.resource.request.UpdateUserInfoRequestModel;
+import com.project.visit.resource.request.UpsertDescriptionRequest;
 import com.project.visit.resource.response.DoctorListResponseModel;
 import com.project.visit.resource.response.DoctorResponseModel;
 import com.project.visit.resource.response.ExpertiseResponse;
@@ -36,6 +37,12 @@ public class DoctorResource {
         return ResponseEntity.ok(new DoctorListResponseModel(result));
     }
 
+    @PostMapping("/profile/description")
+    ResponseEntity<Void> upsertDescription(@RequestBody UpsertDescriptionRequest request) {
+        service.setDescription(RequestContextInterceptor.getCurrentContext().getUserId(), request.getDescription());
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/{medicalCode}")
     ResponseEntity<DoctorResponseModel> getDoctorByMedicalCode(@PathVariable("medicalCode") String code) {
         return ResponseEntity.ok(new DoctorResponseModel(mapper.toDoctorData(service.findDoctor(code))));
@@ -54,9 +61,16 @@ public class DoctorResource {
     }
 
     @PostMapping("/add/expertise")
-    ResponseEntity<Void> setExpertise(@RequestBody AddExpertiseRequest request) {
+    ResponseEntity<Void> addExpertise(@RequestBody ExpertiseRequest request) {
         var context = RequestContextInterceptor.getCurrentContext();
-        service.setExpertise(context.getUserId(), request.getExpertise());
+        service.addExpertise(context.getUserId(), request.getExpertiseId());
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete/expertise")
+    ResponseEntity<Void> deleteExpertise(@RequestBody ExpertiseRequest request) {
+        var context = RequestContextInterceptor.getCurrentContext();
+        service.deleteExpertise(context.getUserId(), request.getExpertiseId());
         return ResponseEntity.ok().build();
     }
 

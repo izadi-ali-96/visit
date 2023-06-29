@@ -12,6 +12,7 @@ public enum ResponseResult {
     CITY_NOT_FOUND("102", "city.not.found"),
 
     COMMENT_NOT_FOUND("103", "comment.not.found"),
+    EXPERTISE_NOT_FOUND("104", "expertise.not.found"),
 
     INVALID_ACCESS("1000", "invalid.access"),
     VISIT_NOT_FOUND("2000", "visit.not.found"),

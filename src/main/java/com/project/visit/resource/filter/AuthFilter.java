@@ -43,11 +43,13 @@ public class AuthFilter extends OncePerRequestFilter {
     private Map<Pattern, String> PERMIT_URLS() {
         var map = new HashMap<Pattern, String>();
         map.put(Pattern.compile("^/doctor/add/expertise$"), "DOCTOR");
+        map.put(Pattern.compile("^/doctor/delete/expertise$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/info$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/image$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/address/.*\\d$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/address$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/profile$"), "DOCTOR");
+        map.put(Pattern.compile("^/doctor/profile/description$"), "DOCTOR");
         map.put(Pattern.compile("^/visit/generate$"), "DOCTOR");
         map.put(Pattern.compile("^/visit/assign$"), "USER");
         map.put(Pattern.compile("^/visit/user$"), "USER");

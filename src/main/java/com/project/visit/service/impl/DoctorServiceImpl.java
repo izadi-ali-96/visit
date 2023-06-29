@@ -1,6 +1,7 @@
 package com.project.visit.service.impl;
 
 import com.project.visit.exception.DoctorException;
+import com.project.visit.exception.ExpertiseException;
 import com.project.visit.exception.ResponseResult;
 import com.project.visit.model.Address;
 import com.project.visit.model.Doctor;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -123,11 +125,22 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void setExpertise(String userId, List<Long> expertise) {
-        doctorRepository.findByUserId(userId).ifPresent(doctor -> {
-            doctor.setExpertise(expertiseRepository.findAllByIdIn(expertise));
-            doctorRepository.save(doctor);
-        });
+    public void addExpertise(String userId, Long expertiseId) {
+        var doctor = doctorRepository.findByUserId(userId).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
+        var ex = expertiseRepository.findById(expertiseId).orElseThrow(() -> new ExpertiseException(ResponseResult.EXPERTISE_NOT_FOUND));
+        doctor.getExpertise().add(ex);
+        doctorRepository.save(doctor);
+    }
+
+    @Override
+    public void deleteExpertise(String userId, Long expertiseId) {
+        var doctor = doctorRepository.findByUserId(userId).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
+        var ex = expertiseRepository.findById(expertiseId).orElseThrow(() -> new ExpertiseException(ResponseResult.EXPERTISE_NOT_FOUND));
+
+        var list = doctor.getExpertise().stream().filter(e -> e.getId() != ex.getId()).collect(Collectors.toSet());
+        doctor.setExpertise(list);
+
+        doctorRepository.save(doctor);
     }
 
     @Override
@@ -146,5 +159,12 @@ public class DoctorServiceImpl implements DoctorService {
     public ByteArrayResource getFile(String medicalCode) throws IOException {
         var path = Paths.get(basePath + medicalCode);
         return new ByteArrayResource(Files.readAllBytes(path));
+    }
+
+    @Override
+    public void setDescription(String userId, String description) {
+        var doctor = doctorRepository.findByUserId(userId).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
+        doctor.setDescription(description);
+        doctorRepository.save(doctor);
     }
 }

@@ -5,6 +5,7 @@ import com.project.visit.model.Doctor;
 import com.project.visit.model.Expertise;
 import com.project.visit.resource.model.AddressData;
 import com.project.visit.resource.model.DoctorData;
+import com.project.visit.resource.model.ExpertiseData;
 import com.project.visit.resource.request.AddressRequestModel;
 import com.project.visit.resource.request.UpdateUserInfoRequestModel;
 import com.project.visit.service.model.AddressModel;
@@ -40,8 +41,8 @@ public interface DoctorResourceMapper {
     AddressData toAddressData(Address address);
 
     @Named(value = "toTagName")
-    default List<String> toTagName(Set<Expertise> expertise) {
-        return expertise.stream().map(Expertise::getName).toList();
+    default List<ExpertiseData> toTagName(Set<Expertise> expertise) {
+        return expertise.stream().map(ex -> new ExpertiseData(ex.getName(), ex.getId())).toList();
     }
 
     @Mapping(target = "userId", source = "userId")

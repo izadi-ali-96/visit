@@ -3,11 +3,9 @@ package com.project.visit.resource.request;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-public class AddExpertiseRequest {
+public class ExpertiseRequest {
 
-    private List<Long> expertise;
+    private Long expertiseId;
 }
