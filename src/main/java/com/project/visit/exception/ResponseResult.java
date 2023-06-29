@@ -24,7 +24,9 @@ public enum ResponseResult {
 
     NOT_PERMIT_EXCEPTION("4009", "not.permit.exception"),
 
-    TOKEN_EXPIRE("5005", "token.expire");
+    TOKEN_EXPIRE("5005", "token.expire"),
+
+    INVALID_COMMENT_OWNER("6000", "invalid.comment.owner");
     private final String code;
 
     private final String message;

@@ -1,4 +1,4 @@
 package com.project.visit.resource.model;
 
-public record CommentModel(String comment, String userId) {
+public record CommentModel(String user, String comment, String date) {
 }

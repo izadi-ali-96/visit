@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
         var user = userRepository.findByPhone(phone).orElseThrow(() -> new UserException(ResponseResult.USER_NOT_FOUND));
         return JWT.create()
                 .withClaim("userId", user.getUserId())
-                .withExpiresAt(new Date().toInstant().plus(200L, TimeUnit.MINUTES.toChronoUnit()))
+                .withExpiresAt(new Date().toInstant().plus(200L, TimeUnit.DAYS.toChronoUnit()))
                 .withClaim("role", user.getRoles().stream().map(Role::toString).toList())
                 .sign(algorithm);
     }

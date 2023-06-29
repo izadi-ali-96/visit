@@ -21,4 +21,6 @@ public class Comment {
     private String userId;
 
     private String doctorId;
+
+    private Long creationDate;
 }
