@@ -1,5 +1,6 @@
 package com.project.visit.service.impl;
 
+import com.github.eloyzone.jalalicalendar.DateConverter;
 import com.project.visit.exception.DoctorException;
 import com.project.visit.exception.ResponseResult;
 import com.project.visit.exception.UserException;
@@ -11,10 +12,13 @@ import com.project.visit.repository.VisitRepository;
 import com.project.visit.service.VisitService;
 import com.project.visit.service.mapper.VisitServiceMapper;
 import com.project.visit.service.model.GenerateVisitTimeInput;
+import com.project.visit.service.model.TimeModel;
 import com.project.visit.service.model.VisitInfoModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +37,17 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public List<Visit> generateVisitTimes(GenerateVisitTimeInput input) {
-        var visit = new ArrayList<Visit>();
+
+        var converter = new DateConverter();
+        var l = LocalDate.now().plus(input.index(), ChronoUnit.DAYS);
+        var model = new TimeModel(l, converter);
+
         var address = addressRepository.findByIdAndDoctorUserId(input.addressId(), input.userId()).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
+        if (!address.getDays().contains(model.getDay())) {
+            throw new VisitException(ResponseResult.VISIT_INVALID_TIME);
+        }
+
+        var visit = new ArrayList<Visit>();
         var visits = visitRepository.findAllByDoctorUserIdAndAddressIdAndTimeBetween(address.getDoctor().getUserId(), address.getId(), input.from(), input.to());
         if (!visits.isEmpty()) {
             throw new VisitException(ResponseResult.VISIT_EXIST_IN_THIS_TIME);

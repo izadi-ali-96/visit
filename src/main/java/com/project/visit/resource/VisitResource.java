@@ -28,9 +28,9 @@ public class VisitResource {
     private final VisitResourceMapper mapper;
 
     @PostMapping("/generate")
-    ResponseEntity<Void> generateVisits(@RequestBody GenerateVisitRequestMode request) {
+    ResponseEntity<Void> generateVisits(@RequestParam(value = "index", defaultValue = "0") Long index, @RequestBody GenerateVisitRequestMode request) {
         var context = RequestContextInterceptor.getCurrentContext();
-        var req = new GenerateVisitTimeInput(request.from(), request.to(), context.getUserId(), request.addressId());
+        var req = new GenerateVisitTimeInput(request.from(), request.to(), context.getUserId(), request.addressId(), index);
         var result = service.generateVisitTimes(req);
         return ResponseEntity.ok().build();
     }

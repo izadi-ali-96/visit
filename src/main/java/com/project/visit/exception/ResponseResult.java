@@ -19,6 +19,7 @@ public enum ResponseResult {
 
     VISIT_NOT_BELONG_TO_USER("2002", "visit.not.belong.to.user"),
 
+    VISIT_INVALID_TIME("2003", "visit.invalid.time"),
     USER_NOT_FOUND("3000", "user.not.found"),
 
     NOT_PERMIT_EXCEPTION("4009", "not.permit.exception"),
