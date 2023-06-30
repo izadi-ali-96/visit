@@ -1,6 +1,7 @@
 package com.project.visit.service.model;
 
 import com.github.eloyzone.jalalicalendar.DateConverter;
+import com.github.eloyzone.jalalicalendar.JalaliDate;
 import com.github.eloyzone.jalalicalendar.JalaliDateFormatter;
 import lombok.Getter;
 import lombok.Setter;

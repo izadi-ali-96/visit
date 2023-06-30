@@ -6,11 +6,13 @@ import com.project.visit.repository.ProvinceRepository;
 import com.project.visit.service.AuthService;
 import com.project.visit.service.DoctorService;
 import com.project.visit.service.VisitService;
+import com.project.visit.service.model.GenerateVisitByHourInput;
+import com.project.visit.service.model.TimeInput;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Disabled
+//@Disabled
 class ApplicationTest extends BaseTestIT {
 
     @Autowired
@@ -33,6 +35,6 @@ class ApplicationTest extends BaseTestIT {
 
     @Test
     void test() {
-//        visitService.getCurrentTime(0L);
+//        visitService.generateVisitTimes(new GenerateVisitByHourInput(new TimeInput(12, 30), null, null, 0L, null));
     }
 }

@@ -12,14 +12,14 @@ import com.project.visit.repository.UserRepository;
 import com.project.visit.repository.VisitRepository;
 import com.project.visit.service.VisitService;
 import com.project.visit.service.mapper.VisitServiceMapper;
-import com.project.visit.service.model.CurrentTimeServiceModel;
-import com.project.visit.service.model.GenerateVisitTimeInput;
-import com.project.visit.service.model.TimeModel;
-import com.project.visit.service.model.VisitInfoModel;
+import com.project.visit.service.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +58,32 @@ public class VisitServiceImpl implements VisitService {
 
         var start = input.from();
         var end = input.to();
+        while (start + PERIOD <= end) {
+            var v = new Visit();
+            v.setDoctor(address.getDoctor());
+            v.setTime(start);
+            v.setAddress(address);
+            visit.add(v);
+            start = start + PERIOD;
+        }
+        return visitRepository.saveAll(visit);
+    }
+
+    @Override
+    public List<Visit> generateVisitTimes(GenerateVisitByHourInput input) {
+        var address = addressRepository.findByIdAndDoctorUserId(input.addressId(), input.userId()).orElseThrow(() -> new DoctorException(ResponseResult.ADDRESS_NOT_FOUND));
+
+        var localDate = LocalDate.now().plus(input.index(), ChronoUnit.DAYS);
+
+        var start = LocalDateTime.of(localDate, LocalTime.of(input.from().hour(), input.from().minute())).toEpochSecond(ZoneOffset.UTC) * 1000;
+        var end = LocalDateTime.of(localDate, LocalTime.of(input.to().hour(), input.to().minute())).toEpochSecond(ZoneOffset.UTC) * 1000;
+
+        var visits = visitRepository.findAllByDoctorUserIdAndAddressIdAndTimeBetween(address.getDoctor().getUserId(), address.getId(), start, end);
+        if (!visits.isEmpty()) {
+            throw new VisitException(ResponseResult.VISIT_EXIST_IN_THIS_TIME);
+        }
+
+        var visit = new ArrayList<Visit>();
         while (start + PERIOD <= end) {
             var v = new Visit();
             v.setDoctor(address.getDoctor());

@@ -5,6 +5,7 @@ import com.project.visit.resource.filter.RequestContextInterceptor;
 import com.project.visit.resource.mapper.VisitResourceMapper;
 import com.project.visit.resource.request.AssignRequestModel;
 import com.project.visit.resource.request.DoctorVisitInfoRequest;
+import com.project.visit.resource.request.GenerateVisitByHourRequest;
 import com.project.visit.resource.request.GenerateVisitRequestMode;
 import com.project.visit.resource.response.AssignVisitResponse;
 import com.project.visit.resource.response.DoctorVisitInfoResponse;
@@ -12,7 +13,9 @@ import com.project.visit.resource.response.GenerateTimeResponse;
 import com.project.visit.resource.response.UserVisitInfoResponse;
 import com.project.visit.service.TimeConverterService;
 import com.project.visit.service.VisitService;
+import com.project.visit.service.model.GenerateVisitByHourInput;
 import com.project.visit.service.model.GenerateVisitTimeInput;
+import com.project.visit.service.model.TimeInput;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +35,15 @@ public class VisitResource {
     ResponseEntity<Void> generateVisits(@RequestParam(value = "index", defaultValue = "0") Long index, @RequestBody GenerateVisitRequestMode request) {
         var context = RequestContextInterceptor.getCurrentContext();
         var req = new GenerateVisitTimeInput(request.from(), request.to(), context.getUserId(), request.addressId(), index);
-        var result = service.generateVisitTimes(req);
+        service.generateVisitTimes(req);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/generate/time")
+    ResponseEntity<Void> generateVisits(@RequestParam(value = "index", defaultValue = "0") Long index, @RequestBody GenerateVisitByHourRequest request) {
+        var context = RequestContextInterceptor.getCurrentContext();
+        var req = new GenerateVisitByHourInput(new TimeInput(request.getFrom()), new TimeInput(request.getTo()), request.getAddressId(), index, context.getUserId());
+        service.generateVisitTimes(req);
         return ResponseEntity.ok().build();
     }
 
