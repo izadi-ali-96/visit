@@ -110,8 +110,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void deleteAddress(Long doctorId, Long addressIs) {
-        var optionalDoctor = doctorRepository.findById(doctorId);
+    public void deleteAddress(String doctorId, Long addressIs) {
+        var optionalDoctor = doctorRepository.findByUserId(doctorId);
         optionalDoctor.ifPresentOrElse(doctor -> doctor.getAddresses()
                 .stream()
                 .filter(a -> a.getId() == addressIs).findFirst()

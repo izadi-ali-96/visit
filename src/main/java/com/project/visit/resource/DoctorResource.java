@@ -51,7 +51,7 @@ public class DoctorResource {
     }
 
 
-    @GetMapping("/{medicalCode}")
+    @GetMapping("/medical-code/{medicalCode}")
     ResponseEntity<DoctorResponseModel> getDoctorByMedicalCode(@PathVariable("medicalCode") String code) {
         return ResponseEntity.ok(new DoctorResponseModel(mapper.toDoctorData(service.findDoctor(code))));
     }
@@ -103,7 +103,7 @@ public class DoctorResource {
     @DeleteMapping("/address/{addressId}")
     ResponseEntity<Void> deleteAddress(@PathVariable("addressId") Long addressId) {
         var context = RequestContextInterceptor.getCurrentContext();
-        service.deleteAddress(Long.valueOf(context.getUserId()), addressId);
+        service.deleteAddress(context.getUserId(), addressId);
         return ResponseEntity.ok().build();
     }
 

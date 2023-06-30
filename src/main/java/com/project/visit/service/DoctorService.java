@@ -24,7 +24,7 @@ public interface DoctorService {
 
     void updateAddress(Long addressId, AddressModel model);
 
-    void deleteAddress(Long doctorId, Long addressIs);
+    void deleteAddress(String doctorId, Long addressIs);
 
     List<Expertise> getExpertise();
 

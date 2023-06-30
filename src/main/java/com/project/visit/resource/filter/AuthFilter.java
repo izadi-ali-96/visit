@@ -34,7 +34,8 @@ public class AuthFilter extends OncePerRequestFilter {
             Pattern.compile("^/doctor/expertise$"),
             Pattern.compile("^/visit/list$"),
             Pattern.compile("^/visit/doctor/light$"),
-            Pattern.compile("^/doctor/.*\\d$"),
+            Pattern.compile("^/doctor/medical-code/.*\\w$"),
+            Pattern.compile("^/doctor$"),
             Pattern.compile("^/doctor/image/.*\\d$"),
             Pattern.compile("^/location"),
             Pattern.compile("^/visit/doctor$"),
@@ -47,7 +48,7 @@ public class AuthFilter extends OncePerRequestFilter {
         map.put(Pattern.compile("^/doctor/delete/expertise$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/info$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/image$"), "DOCTOR");
-        map.put(Pattern.compile("^/doctor/address/.*\\d$"), "DOCTOR");
+        map.put(Pattern.compile("^/doctor/address/.*\\w$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/address$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/profile$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/profile/status$"), "DOCTOR");
