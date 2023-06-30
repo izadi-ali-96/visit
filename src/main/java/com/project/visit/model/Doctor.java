@@ -37,13 +37,13 @@ public class Doctor implements Serializable {
     @Column(columnDefinition = "LONGTEXT")
     private String description;
     private boolean active = false;
-    @OneToMany(targetEntity = Address.class, mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Address.class, mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Address> addresses = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Expertise> expertise = new HashSet<>();
 
-    @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Visit> visits = new HashSet<>();
 
     public String getFullName() {

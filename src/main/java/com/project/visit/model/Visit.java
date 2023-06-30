@@ -1,6 +1,7 @@
 package com.project.visit.model;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,12 +20,16 @@ public class Visit implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
+    @EqualsAndHashCode.Exclude
     private Doctor doctor;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
+    @EqualsAndHashCode.Exclude
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    @EqualsAndHashCode.Exclude
     private Address address;
 }

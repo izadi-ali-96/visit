@@ -1,44 +1,42 @@
 package com.project.visit.model;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.project.visit.model.converter.StringListConverter;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Address implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-	private String title;
+    private String title;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	private City city;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private City city;
 
-	private String path;
+    private String path;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn
-	private Doctor doctor;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    private Doctor doctor;
 
-	@Convert(converter = StringListConverter.class)
-	private List<String> days;
+    @OneToMany(targetEntity = Visit.class, mappedBy = "address", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<Visit> visits = new ArrayList<>();
+    @Convert(converter = StringListConverter.class)
+    private List<String> days;
 
-	@Convert(converter = StringListConverter.class)
-	private List<String> phones;
+    @Convert(converter = StringListConverter.class)
+    private List<String> phones;
 
 }

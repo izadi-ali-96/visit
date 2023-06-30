@@ -39,6 +39,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final ExpertiseRepository expertiseRepository;
 
     private final static String basePath = "/home/project/pic/";
+    private final VisitRepository visitRepository;
 
 //    private final static String basePath = "/Users/ali/Desktop/test/";
 
@@ -111,16 +112,12 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void deleteAddress(String doctorId, Long addressIs) {
-        var optionalDoctor = doctorRepository.findByUserId(doctorId);
-        optionalDoctor.ifPresentOrElse(doctor -> doctor.getAddresses()
-                .stream()
-                .filter(a -> a.getId() == addressIs).findFirst()
-                .ifPresentOrElse(addressRepository::delete, () -> {
-                    throw new DoctorException(ResponseResult.ADDRESS_NOT_FOUND);
-                }), () -> {
-            throw new DoctorException(ResponseResult.DOCTOR_NOT_FOUND);
-        });
-        checkDoctorActivation(optionalDoctor.get().getUserId());
+        var doctor = doctorRepository.findByUserId(doctorId).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
+        if (!doctor.getAddresses().stream().map(Address::getId).toList().contains(addressIs)) {
+            throw new DoctorException(ResponseResult.INVALID_ACCESS);
+        }
+        addressRepository.deleteById(addressIs);
+        checkDoctorActivation(doctorId);
     }
 
     @Override

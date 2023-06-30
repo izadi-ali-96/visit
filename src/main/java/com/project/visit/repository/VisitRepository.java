@@ -19,4 +19,6 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findAllByDoctorUserIdAndAddressIdAndTimeBetween(String userId, Long addressId, Long from, Long to);
 
     List<Visit> findAllByAddressIdAndTimeBetween(Long addressId, Long from, Long to);
+
+    List<Visit> findAllByAddressId(Long addressId);
 }
