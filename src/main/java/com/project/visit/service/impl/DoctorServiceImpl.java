@@ -94,6 +94,7 @@ public class DoctorServiceImpl implements DoctorService {
         address.setTitle(model.getTitle());
         address.setPhones(model.getPhones());
         addressRepository.save(address);
+
         checkDoctorActivation(doctor);
     }
 
@@ -132,7 +133,7 @@ public class DoctorServiceImpl implements DoctorService {
         var doctor = doctorRepository.findByUserId(userId).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
         var ex = expertiseRepository.findById(expertiseId).orElseThrow(() -> new ExpertiseException(ResponseResult.EXPERTISE_NOT_FOUND));
         doctor.getExpertise().add(ex);
-        doctorRepository.save(doctor);
+        doctor = doctorRepository.save(doctor);
         checkDoctorActivation(doctor);
     }
 
@@ -144,7 +145,7 @@ public class DoctorServiceImpl implements DoctorService {
         var list = doctor.getExpertise().stream().filter(e -> e.getId() != ex.getId()).collect(Collectors.toSet());
         doctor.setExpertise(list);
 
-        doctorRepository.save(doctor);
+        doctor = doctorRepository.save(doctor);
         checkDoctorActivation(doctor);
     }
 
@@ -170,7 +171,7 @@ public class DoctorServiceImpl implements DoctorService {
     public void setDescription(String userId, String description) {
         var doctor = doctorRepository.findByUserId(userId).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
         doctor.setDescription(description);
-        doctorRepository.save(doctor);
+        doctor = doctorRepository.save(doctor);
         checkDoctorActivation(doctor);
     }
 
