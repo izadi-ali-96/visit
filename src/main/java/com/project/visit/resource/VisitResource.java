@@ -84,7 +84,7 @@ public class VisitResource {
     }
 
     @GetMapping("/current/time")
-    ResponseEntity<CurrentTimeModel> getCurrentTime(@RequestParam("index") Long index) {
+    ResponseEntity<CurrentTimeModel> getCurrentTime(@RequestParam(value = "index", defaultValue = "0") Long index) {
         var result = service.getCurrentTime(index);
         return ResponseEntity.ok(new CurrentTimeModel(result.fullDate()));
     }
