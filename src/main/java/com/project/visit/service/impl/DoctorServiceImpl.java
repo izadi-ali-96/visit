@@ -186,6 +186,9 @@ public class DoctorServiceImpl implements DoctorService {
         if (StringUtils.isNotBlank(doctor.getDescription()) && doctor.getAddresses().size() >= 1 && doctor.getExpertise().size() >= 1) {
             doctor.setActive(true);
             doctorRepository.save(doctor);
+        } else {
+            doctor.setActive(false);
+            doctorRepository.save(doctor);
         }
         return doctor.isActive();
 
