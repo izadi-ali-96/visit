@@ -37,4 +37,9 @@ public interface DoctorService {
     ByteArrayResource getFile(String medicalCode) throws IOException;
 
     void setDescription(String userId, String description);
+
+    boolean checkDoctorActivation(String userId);
+
+    boolean checkDoctorActivation(Doctor doctor);
+
 }

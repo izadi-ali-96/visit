@@ -50,6 +50,7 @@ public class AuthFilter extends OncePerRequestFilter {
         map.put(Pattern.compile("^/doctor/address/.*\\d$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/address$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/profile$"), "DOCTOR");
+        map.put(Pattern.compile("^/doctor/profile/status$"), "DOCTOR");
         map.put(Pattern.compile("^/doctor/profile/description$"), "DOCTOR");
         map.put(Pattern.compile("^/visit/generate$"), "DOCTOR");
         map.put(Pattern.compile("^/visit/assign$"), "USER");

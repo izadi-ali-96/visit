@@ -94,6 +94,7 @@ public class DoctorServiceImpl implements DoctorService {
         address.setTitle(model.getTitle());
         address.setPhones(model.getPhones());
         addressRepository.save(address);
+        checkDoctorActivation(doctor);
     }
 
     @Override
@@ -109,7 +110,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void deleteAddress(Long doctorId, Long addressIs) {
-        doctorRepository.findById(doctorId).ifPresentOrElse(doctor -> doctor.getAddresses()
+        var optionalDoctor = doctorRepository.findById(doctorId);
+        optionalDoctor.ifPresentOrElse(doctor -> doctor.getAddresses()
                 .stream()
                 .filter(a -> a.getId() == addressIs).findFirst()
                 .ifPresentOrElse(addressRepository::delete, () -> {
@@ -117,6 +119,7 @@ public class DoctorServiceImpl implements DoctorService {
                 }), () -> {
             throw new DoctorException(ResponseResult.DOCTOR_NOT_FOUND);
         });
+        checkDoctorActivation(optionalDoctor.get().getUserId());
     }
 
     @Override
@@ -130,6 +133,7 @@ public class DoctorServiceImpl implements DoctorService {
         var ex = expertiseRepository.findById(expertiseId).orElseThrow(() -> new ExpertiseException(ResponseResult.EXPERTISE_NOT_FOUND));
         doctor.getExpertise().add(ex);
         doctorRepository.save(doctor);
+        checkDoctorActivation(doctor);
     }
 
     @Override
@@ -141,6 +145,7 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setExpertise(list);
 
         doctorRepository.save(doctor);
+        checkDoctorActivation(doctor);
     }
 
     @Override
@@ -166,5 +171,23 @@ public class DoctorServiceImpl implements DoctorService {
         var doctor = doctorRepository.findByUserId(userId).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
         doctor.setDescription(description);
         doctorRepository.save(doctor);
+        checkDoctorActivation(doctor);
+    }
+
+    @Override
+    public boolean checkDoctorActivation(String userId) {
+        var doctor = doctorRepository.findByUserId(userId)
+                .orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
+        return checkDoctorActivation(doctor);
+    }
+
+    @Override
+    public boolean checkDoctorActivation(Doctor doctor) {
+        if (StringUtils.isNotBlank(doctor.getDescription()) && doctor.getAddresses().size() >= 1 && doctor.getExpertise().size() >= 1) {
+            doctor.setActive(true);
+            doctorRepository.save(doctor);
+        }
+        return doctor.isActive();
+
     }
 }

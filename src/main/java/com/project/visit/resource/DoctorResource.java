@@ -8,6 +8,7 @@ import com.project.visit.resource.request.UpdateUserInfoRequestModel;
 import com.project.visit.resource.request.UpsertDescriptionRequest;
 import com.project.visit.resource.response.DoctorListResponseModel;
 import com.project.visit.resource.response.DoctorResponseModel;
+import com.project.visit.resource.response.DoctorStatusResponse;
 import com.project.visit.resource.response.ExpertiseResponse;
 import com.project.visit.service.DoctorService;
 import jakarta.validation.Valid;
@@ -42,6 +43,13 @@ public class DoctorResource {
         service.setDescription(RequestContextInterceptor.getCurrentContext().getUserId(), request.getDescription());
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/profile/status")
+    ResponseEntity<DoctorStatusResponse> getDoctorStatus() {
+        var context = RequestContextInterceptor.getCurrentContext();
+        return ResponseEntity.ok(new DoctorStatusResponse(service.checkDoctorActivation(context.getUserId())));
+    }
+
 
     @GetMapping("/{medicalCode}")
     ResponseEntity<DoctorResponseModel> getDoctorByMedicalCode(@PathVariable("medicalCode") String code) {
