@@ -37,7 +37,8 @@ public class AuthFilter extends OncePerRequestFilter {
             Pattern.compile("^/doctor/.*\\d$"),
             Pattern.compile("^/doctor/image/.*\\d$"),
             Pattern.compile("^/location"),
-            Pattern.compile("^/visit/doctor$")
+            Pattern.compile("^/visit/doctor$"),
+            Pattern.compile("^/visit/current/time$")
     );
 
     private Map<Pattern, String> PERMIT_URLS() {

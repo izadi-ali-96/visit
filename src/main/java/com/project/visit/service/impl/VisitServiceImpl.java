@@ -1,6 +1,7 @@
 package com.project.visit.service.impl;
 
 import com.github.eloyzone.jalalicalendar.DateConverter;
+import com.github.eloyzone.jalalicalendar.JalaliDateFormatter;
 import com.project.visit.exception.DoctorException;
 import com.project.visit.exception.ResponseResult;
 import com.project.visit.exception.UserException;
@@ -11,6 +12,7 @@ import com.project.visit.repository.UserRepository;
 import com.project.visit.repository.VisitRepository;
 import com.project.visit.service.VisitService;
 import com.project.visit.service.mapper.VisitServiceMapper;
+import com.project.visit.service.model.CurrentTimeServiceModel;
 import com.project.visit.service.model.GenerateVisitTimeInput;
 import com.project.visit.service.model.TimeModel;
 import com.project.visit.service.model.VisitInfoModel;
@@ -107,6 +109,18 @@ public class VisitServiceImpl implements VisitService {
     public List<VisitInfoModel> getVisitOfDoctor(Long from, Long to, Long addressId) {
         var result = visitRepository.findAllByAddressIdAndTimeBetween(addressId, from, to);
         return mapper.toVisitLightModel(result);
+    }
+
+    @Override
+    public CurrentTimeServiceModel getCurrentTime(Long index) {
+        var converter = new DateConverter();
+        var time = LocalDate.now().plus(index, ChronoUnit.DAYS);
+
+        var jalaliDate = converter.gregorianToJalali(time.getYear(), time.getMonth(), time.getDayOfMonth());
+        var day = jalaliDate.getDayOfWeek().getStringInPersian();
+        return new CurrentTimeServiceModel(jalaliDate.getDayOfWeek().getStringInPersian(), jalaliDate.getDayOfWeek().getValue(),
+                jalaliDate.getMonthPersian().getStringInPersian(), jalaliDate.getMonthPersian().getValue(), jalaliDate.getYear(),
+                day + " " + jalaliDate.format(new JalaliDateFormatter("M dd", JalaliDateFormatter.FORMAT_IN_PERSIAN)));
     }
 
 }

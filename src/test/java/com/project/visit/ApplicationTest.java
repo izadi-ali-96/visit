@@ -5,6 +5,7 @@ import com.project.visit.repository.DoctorRepository;
 import com.project.visit.repository.ProvinceRepository;
 import com.project.visit.service.AuthService;
 import com.project.visit.service.DoctorService;
+import com.project.visit.service.VisitService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,11 @@ class ApplicationTest extends BaseTestIT {
     @Autowired
     AuthService authService;
 
+    @Autowired
+    VisitService visitService;
+
     @Test
     void test() {
-        authService.checkToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJleHAiOjE2ODU5ODAyNDAsInJvbGUiOlsiVVNFUiIsIkRPQ1RPUiJdfQ.dr9sIpGRj87MB-gbfYCpdLE-4dGxXC_XQ1cZ7kl3Zaw");
+//        visitService.getCurrentTime(0L);
     }
 }

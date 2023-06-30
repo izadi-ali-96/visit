@@ -1,6 +1,7 @@
 package com.project.visit.service;
 
 import com.project.visit.model.Visit;
+import com.project.visit.service.model.CurrentTimeServiceModel;
 import com.project.visit.service.model.GenerateVisitTimeInput;
 import com.project.visit.service.model.VisitInfoModel;
 
@@ -21,5 +22,7 @@ public interface VisitService {
     List<VisitInfoModel> getDoctorVisit(String doctorId, Long from, Long to, Long addressId);
 
     List<VisitInfoModel> getVisitOfDoctor(Long from, Long to, Long addressId);
+
+    CurrentTimeServiceModel getCurrentTime(Long index);
 
 }

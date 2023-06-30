@@ -1,5 +1,6 @@
 package com.project.visit.resource;
 
+import com.project.visit.model.CurrentTimeModel;
 import com.project.visit.resource.filter.RequestContextInterceptor;
 import com.project.visit.resource.mapper.VisitResourceMapper;
 import com.project.visit.resource.request.AssignRequestModel;
@@ -80,6 +81,12 @@ public class VisitResource {
     @GetMapping("/list")
     ResponseEntity<GenerateTimeResponse> generateTime(@RequestParam(value = "index", defaultValue = "0") Long index, @RequestParam(value = "addressId", defaultValue = "0") Long addressId) {
         return ResponseEntity.ok(mapper.toGenerateTimeResponse(converterService.getTime(addressId, null, index)));
+    }
+
+    @GetMapping("/current/time")
+    ResponseEntity<CurrentTimeModel> getCurrentTime(@RequestParam("index") Long index) {
+        var result = service.getCurrentTime(index);
+        return ResponseEntity.ok(new CurrentTimeModel(result.fullDate()));
     }
 
 }
