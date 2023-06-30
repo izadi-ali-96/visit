@@ -34,6 +34,7 @@ public class Doctor implements Serializable {
 
     private String pictureUrl;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
     private boolean active = false;
     @OneToMany(targetEntity = Address.class, mappedBy = "doctor", fetch = FetchType.LAZY)
