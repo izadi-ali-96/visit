@@ -32,7 +32,7 @@ public interface DoctorService {
 
     void deleteExpertise(String userId, Long expertiseId);
 
-    void saveFile(MultipartFile file, String userId) throws IOException;
+    void saveFile(String file, String userId) throws IOException;
 
     ByteArrayResource getFile(String medicalCode) throws IOException;
 

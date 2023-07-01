@@ -11,11 +11,11 @@ import com.project.visit.service.DoctorService;
 import com.project.visit.service.model.AddressModel;
 import com.project.visit.service.model.UserInfoModel;
 import io.micrometer.common.util.StringUtils;
+import jakarta.xml.bind.DatatypeConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -152,11 +152,10 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void saveFile(MultipartFile file, String userId) throws IOException {
+    public void saveFile(String file, String userId) throws IOException {
         var doctor = doctorRepository.findByUserId(userId).orElseThrow(IllegalStateException::new);
-        var content = file.getBytes();
         FileOutputStream outputStream = new FileOutputStream(basePath + doctor.getMedicalCode(), true);
-        outputStream.write(content);
+        outputStream.write(DatatypeConverter.parseBase64Binary(file));
         outputStream.close();
 
         doctor.setPictureUrl(String.format("http://185.126.200.26:8899/doctor/image/%s", doctor.getMedicalCode()));

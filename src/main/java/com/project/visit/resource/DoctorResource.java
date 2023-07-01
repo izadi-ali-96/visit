@@ -2,10 +2,7 @@ package com.project.visit.resource;
 
 import com.project.visit.resource.filter.RequestContextInterceptor;
 import com.project.visit.resource.mapper.DoctorResourceMapper;
-import com.project.visit.resource.request.AddressRequestModel;
-import com.project.visit.resource.request.ExpertiseRequest;
-import com.project.visit.resource.request.UpdateUserInfoRequestModel;
-import com.project.visit.resource.request.UpsertDescriptionRequest;
+import com.project.visit.resource.request.*;
 import com.project.visit.resource.response.DoctorListResponseModel;
 import com.project.visit.resource.response.DoctorResponseModel;
 import com.project.visit.resource.response.DoctorStatusResponse;
@@ -17,7 +14,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -108,9 +104,9 @@ public class DoctorResource {
     }
 
     @PostMapping("/image")
-    ResponseEntity<Void> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+    ResponseEntity<Void> uploadImage(@RequestBody ImageRequest request) throws IOException {
         var context = RequestContextInterceptor.getCurrentContext();
-        service.saveFile(file, context.getUserId());
+        service.saveFile(request.getFile(), context.getUserId());
         return ResponseEntity.ok().build();
     }
 
