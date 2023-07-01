@@ -2,7 +2,6 @@ package com.project.visit.model;
 
 import com.project.visit.model.converter.StringListConverter;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode
 public class Address implements Serializable {
 
     @Id
@@ -31,7 +29,7 @@ public class Address implements Serializable {
     @JoinColumn
     private Doctor doctor;
 
-    @OneToMany(targetEntity = Visit.class, mappedBy = "address", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(targetEntity = Visit.class, mappedBy = "address", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Visit> visits = new ArrayList<>();
     @Convert(converter = StringListConverter.class)
     private List<String> days;

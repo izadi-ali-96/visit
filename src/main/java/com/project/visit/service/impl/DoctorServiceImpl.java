@@ -11,10 +11,10 @@ import com.project.visit.service.DoctorService;
 import com.project.visit.service.model.AddressModel;
 import com.project.visit.service.model.UserInfoModel;
 import io.micrometer.common.util.StringUtils;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
@@ -113,11 +113,16 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public void deleteAddress(String doctorId, Long addressIs) {
         var doctor = doctorRepository.findByUserId(doctorId).orElseThrow(() -> new DoctorException(ResponseResult.DOCTOR_NOT_FOUND));
-        if (!doctor.getAddresses().stream().map(Address::getId).toList().contains(addressIs)) {
+        var address = doctor.getAddresses().stream().filter(a -> a.getId() == addressIs).findFirst();
+
+        if (address.isEmpty()) {
             throw new DoctorException(ResponseResult.INVALID_ACCESS);
         }
+
+        doctor.getAddresses().remove(address.get());
+        doctor = doctorRepository.save(doctor);
         addressRepository.deleteById(addressIs);
-        checkDoctorActivation(doctorId);
+        checkDoctorActivation(doctor);
     }
 
     @Override

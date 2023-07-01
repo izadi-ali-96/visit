@@ -6,7 +6,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity(name = "doctor")
 @Getter
@@ -37,13 +39,13 @@ public class Doctor implements Serializable {
     @Column(columnDefinition = "LONGTEXT")
     private String description;
     private boolean active = false;
-    @OneToMany(targetEntity = Address.class, mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(targetEntity = Address.class, mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Address> addresses = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Expertise> expertise = new HashSet<>();
 
-    @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Visit> visits = new HashSet<>();
 
     public String getFullName() {
